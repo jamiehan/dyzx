@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/custom.form.css">
+    <style>
+        .robot-control-body {background-color: #330066; bottom:0px;}
+        .robot-control-main {margin-top:60px; }
+        .robot-control-set {margin-top:30px; height:620px; background-color: #9F9F9F}
+        .robot-control-box {padding: 2px 2px;}
+        .home-robot-map-title {color:#FFFFFF; margin-top: 10px; padding: 0 5px;}
+        .home-robot-map-show {height:620px;background-color: #9F9F9F; margin-left:5px; margin-right:0px;  padding: 0 0px;}
+        .home-robot-map-show > div {height:100%; width: 100%}
+        .home-robot-scene-title {color:#FFFFFF; margin-top: 10px; padding: 0 5px;}
+        .home-robot-scene-show {height:620px;background-color: #000000; margin-left:5px; margin-right:0px; padding: 0 0px;}
+        .home-robot-scene-show > img {width:100%; height:100%}
+        .layui-elem-field > legend {font-size: 14px}
+        .camera-control-area {height:185px;}
+        .camera-control-area-right {margin-bottom: 5px}
+        .camera-ctrl-up {text-align: center}
+        .camera-ctrl-left {text-align: center}
+        .camera-ctrl-right {text-align: center}
+        .camera-ctrl-down {text-align: center}
+        .camera-ctrl-speed {margin-top: 5px}
+        .camera-ctrl-speed-selected {padding:0 2px}
+        .camera-ctrl-btn {margin-top:2px}
+        .robot-control-area {height:155px;}
+        .robot-control-area-right {margin-bottom: 5px}
+        .robot-ctrl-up {text-align: center}
+        .robot-ctrl-middle {padding:2px 2px 2px 2px}
+        .robot-ctrl-left {text-align: center}
+        .robot-ctrl-center {text-align: center;}
+        .robot-ctrl-right {text-align: center}
+        .robot-ctrl-down {text-align: center}
+        .robot-ctrl-btn {margin-left:5px; margin-top:2px; text-align: right}
+        .cruise-control-area {height:120px;}
+        .cruise-ctrl-up {margin-top:10px;text-align: left}
+        .cruise-ctrl-up > select {width: 120px}
+        .cruise-ctrl-down {margin-top:20px;text-align: left}
+        .cruise-ctrl-down > input {height: 20px; width:120px}
+        .cruise-control-area-right {margin-bottom: 5px}
+        .cruise-ctrl-btn {margin-top:2px}
+        .harmful-gas-area-input > input {height: 20px; width:50px}
+        .home-robot-rfid-alarm-textarea > textarea {min-height: 50px;resize:none}
+        .home-robot-status {margin-top:5px;height:80px;color:#FFFFFF}
+    </style>
+</head>
+<body>
+<div class="robot-control-body">
+    <!-- 内容主体区域 -->
+    <div class="layui-row robot-control-main">
+        <div class="layui-col-md5 robot-control-map">
+            <div class="layui-row home-robot-map-title">地图</div>
+            <div class="layui-row home-robot-map-show" id="navCanvas">
+            </div>
+        </div>
+        <div class="layui-col-md5 robot-control-scene">
+            <div class="layui-row home-robot-scene-title">镜头
+            </div>
+            <div class="layui-row home-robot-scene-show">
+                <img src="http://192.168.1.102:8080/stream?topic=/camera/color/image_raw"></img>
+            </div>
+        </div>
+        <div class="layui-col-md2 robot-control-set">
+            <div class="layui-row camera-control-area">
+                <fieldset class="layui-elem-field">
+                    <legend>摄像头控制</legend>
+                    <div class="layui-field-box robot-control-box">
+                        <div class="layui-col-md8 camera-control-area-left">
+                            <div class="layui-row camera-ctrl-up">
+                                <button type="button" class="layui-btn layui-btn-sm layui-btn-normal">上</button>
+                            </div>
+                            <div class="layui-row camera-ctrl-center">
+                                <div class="layui-col-md4 camera-ctrl-left"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">左</button></div>
+                                <div class="layui-col-md4">&nbsp;</div>
+                                <div class="layui-col-md4 camera-ctrl-right"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">右</button></div>
+                            </div>
+                            <div class="layui-row camera-ctrl-down">
+                                <button type="button" class="layui-btn layui-btn-sm layui-btn-normal">下</button>
+                            </div>
+                            <div class="layui-row camera-ctrl-speed">
+                                <div class="layui-col-md6 camera-ctrl-speed-title">云台速度</div>
+                                <div class="layui-col-md6 camera-ctrl-speed-selected">
+                                    <select name="robot-speed">
+                                        <option value="1" selected="">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4 camera-control-area-right">
+                            <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">开始作业</button></div>
+                            <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">&nbsp;关&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;闭&nbsp;</button></div>
+                            <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">&nbsp;刷&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;新&nbsp;</button></div>
+                            <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">开始录制</button></div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="layui-row robot-control-area">
+                <fieldset class="layui-elem-field">
+                    <legend>机器人控制</legend>
+                    <div class="layui-field-box robot-control-box">
+                        <div class="layui-col-md7 robot-control-area-left">
+                            <div class="layui-row robot-ctrl-up">
+                                <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="ctlRobot('forward')">前进</button>
+                            </div>
+                            <div class="layui-row robot-ctrl-middle">
+                                <div class="layui-col-md4 robot-ctrl-left">
+                                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="ctlRobot('left')">左转</button>
+                                </div>
+                                <div class="layui-col-md4 robot-ctrl-center">
+                                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="stopRobot()">停止</button>
+                                </div>
+                                <div class="layui-col-md4 robot-ctrl-right">
+                                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="ctlRobot('right')">右转</button>
+                                </div>
+                            </div>
+                            <div class="layui-row robot-ctrl-down">
+                                <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="ctlRobot('backward')">后退</button>
+                            </div>
+                        </div>
+                        <div class="layui-col-md5 robot-control-area-right">
+                            <div class="layui-rows robot-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="chargingPoint()">&nbsp;充&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电&nbsp;</button></div>
+                            <div class="layui-rows robot-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">&nbsp;抓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;拍&nbsp;</button></div>
+                            <div class="layui-rows robot-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">查看历史抓拍</button></div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="layui-row cruise-control-area">
+                <fieldset class="layui-elem-field">
+                    <legend>设置巡航方案</legend>
+                    <div class="layui-field-box robot-control-box">
+                        <div class="layui-col-md8 cruise-control-area-left">
+                            <div class="layui-row cruise-ctrl-up">
+                                <select name="" lay-verify="required">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="layui-row cruise-ctrl-down">
+                                <input type="text" name="title" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4 cruise-control-area-right">
+                            <div class="layui-rows cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">获取位置</button></div>
+                            <div class="layui-rows cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">单点巡航</button></div>
+                            <div class="layui-rows cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">多点巡航</button></div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row home-robot-status">
+        <fieldset class="layui-elem-field">
+            <legend>机器人状态</legend>
+            <div class="layui-field-box">
+                <div class="layui-row">
+                    <div class="layui-col-md1">机器人编号：</div>
+                    <div class="layui-col-md1">&nbsp;</div>
+                    <div class="layui-col-md1">型号：</div>
+                    <div class="layui-col-md1">&nbsp;</div>
+                    <div class="layui-col-md1">在线状态：</div>
+                    <div class="layui-col-md1">&nbsp;</div>
+                    <div class="layui-col-md1">工作地点：</div>
+                    <div class="layui-col-md5">&nbsp;</div>
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col-md1">所属单位：</div>
+                    <div class="layui-col-md3">&nbsp;</div>
+                    <div class="layui-col-md1">联系人：</div>
+                    <div class="layui-col-md1">&nbsp;</div>
+                    <div class="layui-col-md1">电话：</div>
+                    <div class="layui-col-md5">&nbsp;</div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+</body>
+
+<script src="/layui/layui.all.js"></script>
+<script src="/js/core.util.js"></script>
+
+</html>

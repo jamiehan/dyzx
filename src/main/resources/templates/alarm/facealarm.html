@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+</head>
+<script src="/js/jquery.js"></script>
+<style>
+    .face-image-area {
+        height:300px;
+        width: 1100px;
+        display: table;
+    }
+    .system-image {
+        height:300px;
+        width: 550px;
+        background-color: #000000;
+        text-align: center;
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .scene-image {
+        height:300px;
+        width: 550px;
+        background-color: #000000;
+        text-align: center;
+        display: table-cell;
+        vertical-align: middle;
+    }
+</style>
+<body>
+<div class="layui-container">
+    <div class="layui-row face-image-area">
+        <div class="layui-col-md6">
+            <fieldset>
+                <legend>系统照片</legend>
+                <div class="layui-row system-image">
+                    <img id="systemImg">
+                </div>
+            </fieldset>
+        </div>
+        <div class="layui-col-md6">
+            <fieldset>
+                <legend>现场照片</legend>
+                <div class="layui-row scene-image">
+                    <img id="sceneImg">
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div class="layui-row">
+        <fieldset>
+            <legend>信息提示</legend>
+            <div class="layui-row">
+                <div class="layui-col-md2">机器人编号:</div>
+                <div class="layui-col-md10"><span id="robotCode"></span></div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2">黑名单编号:</div>
+                <div class="layui-col-md2"><span id="blackListId"></span></div>
+                <div class="layui-col-md2">姓名:</div>
+                <div class="layui-col-md2"><span id="name"></span></div>
+                <div class="layui-col-md2">性别:</div>
+                <div class="layui-col-md2"><span id="sex"></span></div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md4">身份证:</div>
+                <div class="layui-col-md4"><span id="idCard"></span></div>
+                <div class="layui-col-md2">出生日期:</div>
+                <div class="layui-col-md2"><span id="bornDate"></span></div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md4">交控单位:</div>
+                <div class="layui-col-md4"><span id="recCompany"></span></div>
+                <div class="layui-col-md2">交控日期:</div>
+                <div class="layui-col-md2"><span id="recDate"></span></div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2">单位电话:</div>
+                <div class="layui-col-md2"><span id="telephone"></span></div>
+                <div class="layui-col-md2">查控类型:</div>
+                <div class="layui-col-md2"><span id="checkType"></span></div>
+                <div class="layui-col-md2">处置类型:</div>
+                <div class="layui-col-md2"><span id="dealType"></span></div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2">备注:</div>
+                <div class="layui-col-md10"><span id="note"></span></div>
+            </div>
+
+        </fieldset>
+    </div>
+</div>
+<script>
+
+   /* function loadFaceAlarm()
+    {
+        if ("WebSocket" in window)
+        {
+            alert("您的浏览器支持 WebSocket!");
+
+            // 打开一个 web socket
+            var ws = new WebSocket("ws://127.0.0.1:8080/facealarm");
+
+            ws.onopen = function()
+            {
+                // Web Socket 已连接上，使用 send() 方法发送数据
+                ws.send("发送数据");
+                alert("数据发送中...");
+            };
+
+            ws.onmessage = function (evt)
+            {
+                // var received_msg = evt.data;
+                alert("数据已接收..." + evt);
+            };
+
+            ws.onclose = function()
+            {
+                // 关闭 websocket
+                alert("连接已关闭...");
+                ws = new WebSocket("ws://127.0.0.1:8080/facealarm");
+
+                alert("重新链接");
+            };
+        }
+
+        else
+        {
+            // 浏览器不支持 WebSocket
+            alert("您的浏览器不支持 WebSocket!");
+        }
+    }*/
+
+    var socketurl = "ws://192.168.0.204:8080/facealarm";
+    var ws = null;
+    var xt = 0;
+    createWebSocket();
+    function createWebSocket(){
+        try {
+            ws = new WebSocket(socketurl);
+            initEventHandle();
+        } catch (e) {
+            reconnect();
+        }
+    }
+
+    function reconnect() {
+        //没连接上会一直重连，设置延迟避免请求过多
+        createWebSocket();
+
+    }
+    /*//心跳 防止长时间没有传输信息 断链接
+    setInterval(function(){
+        if(xt >= 2){
+            console.log("重新链接");
+            reconnect();
+            xt = 0;
+        }else{
+            // var txt = {'code':1005};
+            // ws.send(JSON.stringify(txt));//获取我的socketid
+            xt++;
+        }
+
+    },5000)*/
+    //初始化信息
+    function initEventHandle() {
+        ws.onopen = function(event){
+            // alert("打开链接...");
+            //var txt = {'code':1001};
+            // ws.send(JSON.stringify(txt));//获取我的socketid
+        }
+        ws.onclose = function (event) {
+            // alert("关闭链接...");
+            //关闭的时候会调用这里
+            ws = new WebSocket(socketurl);
+        }
+
+        ws.onmessage = function(evt){
+            // alert("收到消息...");
+            // alert(evt.data);
+            console.log(evt.data);
+
+            data = JSON.parse(evt.data);
+            console.log(data);
+            console.log(data.faceRecognitionResultVO);
+            $("#systemImg").attr("src",data.faceRecognitionResultVO.db_image);
+            $("#sceneImg").attr("src",data.faceRecognitionResultVO.detect_image);
+            // $("#sceneImg").attr("src","data:image/jpeg;base64,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");
+
+            $("#blackListId").html(data.blacklistEntity.blackid);
+            $("#name").html(data.blacklistEntity.xingming);
+            $("#sex").html(data.blacklistEntity.xingbie);
+            $("#idCard").html(data.blacklistEntity.shenfenzheng);
+            $("#bornDate").html(data.blacklistEntity.chushengriqi);
+            $("#recCompany").html(data.blacklistEntity.jiaokongdw);
+            $("#recDate").html(data.blacklistEntity.jiaokongriqi);
+            $("#telephone").html(data.blacklistEntity.danweidh);
+            $("#checkType").html(data.blacklistEntity.chakonglx);
+            $("#dealType").html(data.blacklistEntity.chuzhi);
+            $("#note").html(data.blacklistEntity.beizhu);
+
+
+            // alert(data);
+
+            /*data = JSON.parse(evt.data);
+
+            if(data.code == "1003"){
+                //返回socketid
+                console.log(data);
+                var socketid = data.msg;
+                $.post('{:U("api/index/setsocketid")}', {"socketid":socketid}, function(data) {
+                    //
+                });
+            }else if(data.code == "1004"){
+                //内容信息
+                var msg = data.msg;
+                if(msg.code == "23"){
+                    //上传商品需要审核通知
+                    console.log(msg);
+                    //语言通知
+                    var vi = document.getElementById("msgtixing");
+                    vi.src = "./Public/new_order.mp3";
+                    vi.play();
+
+                    //界面通知
+                    layer.open({
+                        title: '及时通知'
+                        ,content: msg.msg
+                        ,offset: 'rb'
+                    });
+                }
+            }else if(data.code == "1005"){
+                xt = 0;
+                var msg = data.msg;
+                console.log(msg);
+            }*/
+        }
+    }
+
+
+</script>
+</body>
+</html>

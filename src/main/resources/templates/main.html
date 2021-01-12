@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>主页</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script>
+        var g_SoftWareVersion="V4.03.R12.00014914.12012.142800.00200";
+        var g_HardWareVersion="Unknown";
+        var g_mBuildTime="2019/1/14 17:24:29";
+        var g_SerialNo="230395345eb939be";
+        var g_VideoInChannel=1;
+        var g_AlarmInChannel=2;
+        var g_AlarmOutChannel=1;
+        var g_AudioInChannel=1;
+        var g_DigChannel=0;
+
+
+        var g_channelNumber=1;
+        var g_user="admin";
+        var g_port="554";
+        var g_address =document.location.hostname;
+
+        if (g_address == "")
+        {
+
+        }
+
+        var iLanguage=101;
+        var g_passWord="tlJwpbo6";
+
+
+        var g_bSafari=false;
+    </script>
+</head>
+<style>
+    .layui-top-box {padding:40px 20px 20px 20px;color:#fff}
+    .panel {margin-bottom:17px;background-color:#fff;border:1px solid transparent;border-radius:3px;-webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);box-shadow:0 1px 1px rgba(0,0,0,.05)}
+    .panel-body {padding:15px}
+    .panel-title {margin-top:0;margin-bottom:0;font-size:14px;color:inherit}
+    .label {display:inline;padding:.2em .6em .3em;font-size:75%;font-weight:700;line-height:1;color:#fff;text-align:center;white-space:nowrap;vertical-align:baseline;border-radius:.25em;margin-top: .3em;}
+    .layui-red {color:red}
+    .main_btn > p {height:40px;}
+    .pull-right {float: right;}
+
+    .layui-tab-title .layui-this{background-color:#009688;color:#eee;}.first-tab i.layui-tab-close{display:none !important;}.layui-layout-admin .layui-header{background-color:#1aa094 !important;}.layui-layout-admin .layui-logo{background-color:#0c0c0c !important;}.layuimini-color .color-title{padding:10px 0 10px 20px;border-bottom:1px solid #d9dada;margin-bottom:8px;}.layuimini-color .color-content{padding:0 5px 0 5px;}.layuimini-color .color-content ul{list-style:none;text-align:center;}.layuimini-color .color-content ul li{position:relative;display:inline-block;vertical-align:top;width:80px;height:50px;margin:0 15px 15px 0;padding:2px 2px 4px 2px;background-color:#f2f2f2;cursor:pointer;font-size:12px;color:#666;}.layuimini-color .color-content li.layui-this:after,.layuimini-color .color-content li:hover:after{width:100%;height:100%;padding:4px;top:-5px;left:-5px;border-color:#d8d8d8;opacity:1;}.layuimini-color .color-content li:after{content:'';position:absolute;z-index:20;top:50%;left:50%;width:1px;height:0;border:1px solid #f2f2f2;transition:all .3s;-webkit-transition:all .3s;opacity:0;}
+    .layuimini-tool-left {position:absolute!important;top:0;left:200px;width:60px;height:100%;line-height:60px;text-align:center;color:#ffffff!important;}
+    .closeBox {height:35px !important;}
+    .closeBox > li {line-height:35px !important;}
+    .closeBox {position:absolute;right: -10px;top: 16px;background-color:#fff !important;color:#000;border-bottom:1px solid #e2e2e2;padding:0 10px !important;}
+    .closeBox .layui-nav-item {line-height:40px;}
+    .closeBox .layui-nav-item > a,.closeBox .layui-nav-item > a:hover {color:#000;}
+    .closeBox .layui-nav-child {top:40px;}
+    .layui-layout-left {left: 0px;}
+    .layui-body {left: 0px;}
+    .layui-nav {padding: 0 0px;}
+    .layui-nav-alarm {left: 260px;}
+    .layui-title {height: 60px; font-size:30px; padding: 0 15px; line-height: 60px; background-color: #330066!important; color: #ffffff;}
+    .layui-layout-right {background-color: #330066!important;}
+    .menu-layer {z-index: 10000}
+    .home-robot-content {background-color: #330066;}
+    .layui-container {width: 100%; padding: 0 0px;}
+    .home-left-menu {margin-top: 60px;}
+    .home-robot-list {height: 100%; padding: 0 5px;}
+    .home-robot-list-title {color:#FFFFFF; margin-top:10px; padding: 0 5px;}
+    .home-robot-info {height: 100%; padding: 0 5px;}
+
+    .robot-control-body {background-color: #330066; top:0px;bottom:0px;}
+    .robot-control-main {margin-top:0px; }
+    .robot-control-set {margin-top:30px; height:620px; background-color: #9F9F9F}
+    .robot-control-box {padding: 2px 2px;}
+    .home-robot-map-title {color:#FFFFFF; margin-top: 10px; padding: 0 5px;}
+    .home-robot-map-show {height:620px;background-color: #9F9F9F; margin-left:5px; margin-right:0px;  padding: 0 0px;}
+    .home-robot-map-show > div {height:100%; width: 100%}
+    .home-robot-scene-title {color:#FFFFFF; margin-top: 10px; padding: 0 5px;}
+    .home-robot-scene-show {height:620px;background-color: #000000; margin-left:5px; margin-right:0px; padding: 0 0px;}
+    .home-robot-scene-show > img {width:100%; height:100%}
+    .home-robot-scene-show > canvas {width:100%; height:100%}
+    /*.home-robot-scene-show {height:420px;background-color: #000000;}*/
+    .robot-control {height:638px;margin-top:10px; background-color: #9F9F9F;display: none}
+    .layui-elem-field > legend {font-size: 14px}
+    .camera-control-area {height:185px;}
+    .camera-control-area-right {margin-bottom: 5px}
+    .camera-ctrl-up {text-align: center}
+    .camera-ctrl-left {text-align: center}
+    .camera-ctrl-zoomin {text-align: center}
+    .camera-ctrl-zoomout {text-align: center;margin-left: 1px;}
+    .camera-ctrl-right {text-align: center}
+    .camera-ctrl-center {margin-top: 5px;margin-bottom: 5px}
+    .camera-ctrl-down {text-align: center}
+    .camera-ctrl-speed {margin-top: 5px}
+    .camera-ctrl-speed-selected {padding:0 2px}
+    .camera-ctrl-btn {margin-top:2px}
+    .robot-control-area {height:155px;}
+    .robot-control-area-right {margin-bottom: 5px}
+    .robot-ctrl-up {text-align: center}
+    .robot-ctrl-middle {padding:2px 2px 2px 2px}
+    .robot-ctrl-left {text-align: center}
+    .robot-ctrl-center {text-align: center;}
+    .robot-ctrl-right {text-align: center}
+    .robot-ctrl-down {text-align: center}
+    .robot-ctrl-btn {margin-left:5px; margin-top:2px; text-align: right}
+    .cruise-control-area {height:120px;}
+    .cruise-ctrl-up {margin-top:10px;text-align: left}
+    .cruise-ctrl-up > select {width: 120px}
+    .cruise-ctrl-down {margin-top:20px;text-align: left}
+    .cruise-ctrl-down > input {height: 20px; width:120px}
+    .cruise-control-area-right {margin-bottom: 5px}
+    .cruise-ctrl-btn {margin-top:2px}
+    .home-robot-monitoring-data {color:#FFFFFF; height:95px;display:none}
+    .harmful-gas-area-left-down {margin-top:10px; margin-bottom:5px;color:#FFFFFF}
+    .harmful-gas-area-input > input {height: 20px; width:50px}
+    .harmful-gas-area-right {text-align:center;margin-bottom:5px;}
+    .home-robot-rfid-alarm {margin-top:5px;height:90px;color:#FFFFFF;display:none}
+    .home-robot-rfid-alarm-textarea > textarea {min-height: 50px;resize:none}
+    .home-robot-status {margin-top:5px;height:80px;color:#FFFFFF}
+    .layui-tree-txt {color:#FFFFFF}
+    .layui-tab-content {
+        padding: 0px;
+    }
+
+</style>
+<body>
+<div class="layui-body">
+
+    <div class="robot-control-body">
+        <!-- 内容主体区域 -->
+        <div class="layui-row robot-control-main">
+            <div class="layui-col-md5 robot-control-map">
+                <div class="layui-row home-robot-map-title">地图</div>
+                <div class="layui-row home-robot-map-show" id="navCanvas">
+                </div>
+            </div>
+            <div class="layui-col-md5 robot-control-scene">
+                <div class="layui-row home-robot-scene-title">镜头
+                </div>
+                <div class="layui-row home-robot-scene-show">
+                    <!--                    <video src="http://192.168.1.58:8555/testVideo"-->
+                    <!--                           style="width: 100%; height:100%;object-fit: fill"-->
+                    <!--                           autoplay="autoplay" loop="loop">-->
+                    <!--                    </video>-->
+                    <canvas id="video"></canvas>
+                    <!--                    <img src="http://192.168.1.58:8555/testVideo"></img>-->
+                    <!--                    <img src="rtsp://admin:@192.168.1.101"></img>-->
+                    <!--
+                                        <object type='application/x-vlc-plugin' id='vlc' events='True'
+                                                width="500" height="600">
+                                            <param name='mrl' value='rtsp://admin:@192.168.1.101' />
+                                            <param name='volume' value='50' />
+                                            <param name='autoplay' value='true' />
+                                            <param name='loop' value='false' />
+                                            <param name='fullscreen' value='true' />
+                                        </object>
+                    -->
+                    <!--                    <img src="http://192.168.1.102:8080/stream?topic=/camera/color/image_raw"></img>-->
+                </div>
+            </div>
+            <div class="layui-col-md2 robot-control-set">
+                <div class="layui-row camera-control-area">
+                    <fieldset class="layui-elem-field">
+                        <legend>摄像头控制</legend>
+                        <div class="layui-field-box robot-control-box">
+                            <div class="layui-col-md8 camera-control-area-left">
+                                <div class="layui-row camera-ctrl-up">
+                                    <!--                                        <div class="layui-col-md4 camera-ctrl-left-up"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,12)" onmouseup="cameraCtrl(1,12)">左上</button></div>-->
+                                    <!--                                        <div class="layui-col-md4">-->
+                                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal"
+                                            onmousedown="cameraCtrl(0,0)" onmouseup="cameraCtrl(1,0)">
+                                        上</button>
+                                    <!--                                        </div>-->
+                                    <!--                                        <div class="layui-col-md4 camera-ctrl-right-up"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,10)" onmouseup="cameraCtrl(1,10)">右上</button></div>-->
+
+                                </div>
+                                <div class="layui-row camera-ctrl-center">
+                                    <div class="layui-col-md3 camera-ctrl-left"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,2)" onmouseup="cameraCtrl(1,2)">左</button></div>
+                                    <div class="layui-col-md6 camera-ctrl-zoomin">
+                                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,4)" onmouseup="cameraCtrl(1,4)">+</button><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,5)" onmouseup="cameraCtrl(1,5)">-</button>
+                                        <!--                                        </div>-->
+                                        <!--                                        <div class="layui-col-md3 camera-ctrl-zoomout">-->
+                                        <!--                                            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,5)" onmouseup="cameraCtrl(1,5)">-</button>-->
+                                    </div>
+                                    <div class="layui-col-md3 camera-ctrl-right"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,3)" onmouseup="cameraCtrl(1,3)">右</button></div>
+                                </div>
+                                <div class="layui-row camera-ctrl-down">
+                                    <!--                                        <div class="layui-col-md4 camera-ctrl-left-down"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,12)" onmouseup="cameraCtrl(1,12)">左下</button></div>-->
+                                    <!--                                        <div class="layui-col-md4">-->
+                                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,1)" onmouseup="cameraCtrl(1,1)">下</button>
+                                    <!--                                        </div>-->
+                                    <!--                                        <div class="layui-col-md4 camera-ctrl-right-down"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,13)" onmouseup="cameraCtrl(1,13)">右下</button></div>-->
+                                </div>
+                                <div class="layui-row camera-ctrl-speed">
+                                    <div class="layui-col-md6 camera-ctrl-speed-title">云台速度</div>
+                                    <div class="layui-col-md6 camera-ctrl-speed-selected">
+                                        <select name="camera-speed" id="cameraSpeed">
+                                            <option value="1" selected="">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4 camera-control-area-right">
+                                <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,12)" onmouseup="cameraCtrl(1,12)">&nbsp;左&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上&nbsp;</button></div>
+                                <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,11)" onmouseup="cameraCtrl(1,11)">&nbsp;左&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下&nbsp;</button></div>
+                                <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,10)" onmouseup="cameraCtrl(1,10)">&nbsp;右&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上&nbsp;</button></div>
+                                <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,13)" onmouseup="cameraCtrl(1,13)">&nbsp;右&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下&nbsp;</button></div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="layui-row robot-control-area">
+                    <fieldset class="layui-elem-field">
+                        <legend>机器人控制</legend>
+                        <div class="layui-field-box robot-control-box">
+                            <div class="layui-col-md7 robot-control-area-left">
+                                <div class="layui-row robot-ctrl-up">
+                                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="ctlRobot('forward')">前进</button>
+                                </div>
+                                <div class="layui-row robot-ctrl-middle">
+                                    <div class="layui-col-md4 robot-ctrl-left">
+                                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="ctlRobot('left')">左转</button>
+                                    </div>
+                                    <div class="layui-col-md4 robot-ctrl-center">
+                                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="stopRobot()">停止</button>
+                                    </div>
+                                    <div class="layui-col-md4 robot-ctrl-right">
+                                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="ctlRobot('right')">右转</button>
+                                    </div>
+                                </div>
+                                <div class="layui-row robot-ctrl-down">
+                                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="ctlRobot('backward')">后退</button>
+                                </div>
+                            </div>
+                            <div class="layui-col-md5 robot-control-area-right">
+                                <div class="layui-rows robot-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="chargingPoint()">&nbsp;充&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电&nbsp;</button></div>
+                                <!--                                    <div class="layui-rows robot-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">&nbsp;抓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;拍&nbsp;</button></div>-->
+                                <!--                                    <div class="layui-rows robot-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">查看历史抓拍</button></div>-->
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="layui-row cruise-control-area">
+                    <fieldset class="layui-elem-field">
+                        <legend>设置巡航方案</legend>
+                        <div class="layui-field-box robot-control-box">
+                            <div class="layui-col-md8 cruise-control-area-left">
+                                <div class="layui-row cruise-ctrl-up">
+                                    <select name="" lay-verify="required">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                                <div class="layui-row cruise-ctrl-down">
+                                    <input type="text" name="title" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-col-md4 cruise-control-area-right">
+                                <div class="layui-rows cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">获取位置</button></div>
+                                <div class="layui-rows cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">单点巡航</button></div>
+                                <div class="layui-rows cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">多点巡航</button></div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row home-robot-status">
+            <fieldset class="layui-elem-field">
+                <legend>机器人状态</legend>
+                <div class="layui-field-box">
+                    <div class="layui-row">
+                        <div class="layui-col-md1">机器人编号：</div>
+                        <div class="layui-col-md1">&nbsp;</div>
+                        <div class="layui-col-md1">型号：</div>
+                        <div class="layui-col-md1">&nbsp;</div>
+                        <div class="layui-col-md1">在线状态：</div>
+                        <div class="layui-col-md1">&nbsp;</div>
+                        <div class="layui-col-md1">工作地点：</div>
+                        <div class="layui-col-md5">&nbsp;</div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-md1">所属单位：</div>
+                        <div class="layui-col-md3">&nbsp;</div>
+                        <div class="layui-col-md1">联系人：</div>
+                        <div class="layui-col-md1">&nbsp;</div>
+                        <div class="layui-col-md1">电话：</div>
+                        <div class="layui-col-md5">&nbsp;</div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+<!--
+    <div class="layui-tab" lay-filter="tab" lay-allowclose="true">
+        <ul class="layui-tab-title" style="width: 90%">
+            <li class="first-tab layui-this"><i class="layui-icon layui-icon-home"></i> <span>主页</span></li>
+        </ul>
+        <ul class="layui-nav closeBox">
+            <li class="layui-nav-item">
+                <a href="javascript:;"> <i class="layui-icon layui-icon-circle-dot"></i> 页面操作</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;" data-page-close="other"><i class="layui-icon layui-icon-close"></i> 关闭其他</a></dd>
+                    <dd><a href="javascript:;" data-page-close="all"><i class="layui-icon layui-icon-close-fill"></i> 关闭全部</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <iframe th:src="@{/index/main}" frameborder="0" name="content" width="100%" id="home"></iframe>
+            </div>
+        </div>
+    </div>-->
+
+</div>
+<!--<div class="layuimini-container">
+    <div class="layuimini-main layui-top-box">
+        <div class="layui-row layui-col-space10">
+
+            <div class="layui-col-md3">
+                <div class="col-xs-6 col-md-3">
+                    <div class="panel layui-bg-cyan">
+                        <div class="panel-body">
+                            <div class="panel-title">
+                                <span class="label pull-right layui-bg-blue">实时</span>
+                                <h5>用户统计</h5>
+                            </div>
+                            <div class="panel-content">
+                                <h1 class="no-margins">1234</h1>
+                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> 1234</div>
+                                <small>当前分类总记录数</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md3">
+                <div class="col-xs-6 col-md-3">
+                    <div class="panel layui-bg-blue">
+                        <div class="panel-body">
+                            <div class="panel-title">
+                                <span class="label pull-right layui-bg-cyan">实时</span>
+                                <h5>商品统计</h5>
+                            </div>
+                            <div class="panel-content">
+                                <h1 class="no-margins">1234</h1>
+                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> 1234</div>
+                                <small>当前分类总记录数</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md3">
+                <div class="col-xs-6 col-md-3">
+                    <div class="panel layui-bg-green">
+                        <div class="panel-body">
+                            <div class="panel-title">
+                                <span class="label pull-right layui-bg-orange">实时</span>
+                                <h5>浏览统计</h5>
+                            </div>
+                            <div class="panel-content">
+                                <h1 class="no-margins">1234</h1>
+                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> 1234</div>
+                                <small>当前分类总记录数</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md3">
+                <div class="col-xs-6 col-md-3">
+                    <div class="panel layui-bg-orange">
+                        <div class="panel-body">
+                            <div class="panel-title">
+                                <span class="label pull-right layui-bg-green">实时</span>
+                                <h5>订单统计</h5>
+                            </div>
+                            <div class="panel-content">
+                                <h1 class="no-margins">1234</h1>
+                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> 1234</div>
+                                <small>当前分类总记录数</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-box">
+        <div class="layui-row layui-col-space10">
+            <div class="layui-col-md12">
+                <blockquote class="layui-elem-quote main_btn">
+                    <p>喜欢此后台模板的可以给我的Gitee加个Star支持一下</p>
+                    <p>Gitee地址：<a target="_blank" href='https://gitee.com/zwens/springboot-manager'><img src='https://gitee.com/zwens/springboot-manager/badge/star.svg?theme=dark' alt='star'></img></a></p>
+                    <p style="float:left;">GitHub地址：
+                        <div style="float:left;">
+                   <iframe src="https://ghbtns.com/github-btn.html?user=aitangbao&repo=springboot-manager&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+                        </div>
+                    </p>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-box">
+        <div class="layui-row layui-col-space10">
+            <div class="layui-col-md6">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="150">
+                        <col width="200">
+                        <col>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>昵称</th>
+                        <th>加入时间</th>
+                        <th>签名</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>wenbin</td>
+                        <td>2020-03-18</td>
+                        <td>人生就像是一场修行</td>
+                    </tr>
+                    <tr>
+                        <td>wenbin</td>
+                        <td>2020-03-18</td>
+                        <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
+                    </tr>
+                    <tr>
+                        <td>wenbin</td>
+                        <td>2020-03-18</td>
+                        <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
+                    </tr>
+                    <tr>
+                        <td>wenbin</td>
+                        <td>2020-03-18</td>
+                        <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="layui-col-md6">
+                <ul class="layui-timeline">
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                        <div class="layui-timeline-content layui-text">
+                            <h3 class="layui-timeline-title">2020年3月18日</h3>
+                            <p>
+                                一切准备工作似乎都已到位。发布之弦，一触即发。
+                                <br>不枉近百个日日夜夜与之为伴。因小而大，因弱而强。
+                                <br>无论它能走多远，抑或如何支撑？至少我曾倾注全心，无怨无悔 <i class="layui-icon"></i>
+                            </p>
+                        </div>
+                    </li>
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                        <div class="layui-timeline-content layui-text">
+                            <div class="layui-timeline-title">过去</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>-->
+<script src="/layui/layui.all.js"></script>
+<script src="/js/core.util.js"></script>
+<script src="/js/jquery.js"></script>
+<script src="/js/home.js?v=0.1"></script>
+<script src="/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/easeljs.min.js"></script>
+<script type="text/javascript" src="/js/easeljs.js"></script>
+<script type="text/javascript" src="/js/eventemitter2.min.js"></script>
+<script type="text/javascript" src="/js/mjpegcanvas.min.js"></script>
+<script type="text/javascript" src="/js/nav2d.js"></script>
+<script type="text/javascript" src="/js/ros2d.js"></script>
+<script type="text/javascript" src="/js/jsmpeg.min.js"></script>
+<script type="text/javascript" src="/js/mt.js"></script>
+<script type="text/javascript" src="/js/SimpChinese.js"></script>
+<script src="/js/roslib.min.js"></script>
+<script src="/js/robot_gui.js"></script>
+<script>
+    init();
+    init_ros();
+
+    var canvas = document.getElementById('video');
+    var url = 'ws://127.0.0.1:8080/videostream';
+    var player = new JSMpeg.Player(url, {canvas: canvas});
+    
+</script>
+</body>
+</html>

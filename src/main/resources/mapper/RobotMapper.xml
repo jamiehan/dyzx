@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.company.project.mapper.RobotMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.company.project.entity.RobotEntity" id="robotMap">
+        <result property="id" column="id"/>
+        <result property="xinghao" column="xinghao"/>
+        <result property="bianhao" column="bianhao"/>
+        <result property="chuchangriqi" column="chuchangriqi"/>
+        <result property="yingjianbanb" column="yingjianbanb"/>
+        <result property="ruanjianbanb" column="ruanjianbanb"/>
+        <result property="suosudw" column="suosudw"/>
+        <result property="gongzuodidian" column="gongzuodidian"/>
+        <result property="zaixianzhuangtai" column="zaixianzhuangtai"/>
+        <result property="yunxinglicheng" column="yunxinglicheng"/>
+        <result property="beizhu" column="beizhu"/>
+    </resultMap>
+
+
+</mapper>
