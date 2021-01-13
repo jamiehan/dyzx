@@ -41,6 +41,8 @@ public class BlacklistEntity extends BaseEntity implements Serializable {
 	@TableField("xingbie")
 	private Integer xingbie;
 
+//	private String strSex;
+
 	/**
 	 * 身份证
 	 */

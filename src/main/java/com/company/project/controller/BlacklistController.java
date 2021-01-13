@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import com.company.project.common.utils.DataResult;
 
 import com.company.project.entity.BlacklistEntity;
@@ -82,6 +84,17 @@ public class BlacklistController {
             queryWrapper.like(BlacklistEntity::getXingming, blacklist.getXingming());
         }
         IPage<BlacklistEntity> iPage = blacklistService.page(page, queryWrapper);
+/*        List<BlacklistEntity> blacklistEntityList = iPage.getRecords();
+        blacklistEntityList.stream().map(x -> {
+            if (x.getXingbie() == 1) {
+                x.setStrSex("男");
+            } else if (x.getXingbie() == 2) {
+                x.setStrSex("女");
+            } else {
+                x.setStrSex("不明");
+            }
+            return x;
+        }).collect(Collectors.toList());*/
         return DataResult.success(iPage);
     }
 
