@@ -1,7 +1,9 @@
 package com.company.project.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.company.project.entity.BlacklistEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -75,8 +77,10 @@ public class RobotController {
     public DataResult findListByPage(@RequestBody RobotEntity robot){
         Page page = new Page(robot.getPage(), robot.getLimit());
         LambdaQueryWrapper<RobotEntity> queryWrapper = Wrappers.lambdaQuery();
-        //查询条件示例
-        //queryWrapper.eq(RobotEntity::getId, robot.getId());
+        //根据机器人编号模糊查询
+        if(StringUtils.isNotBlank(robot.getBianhao())) {
+            queryWrapper.like(RobotEntity::getBianhao, robot.getBianhao());
+        }
         IPage<RobotEntity> iPage = robotService.page(page, queryWrapper);
         return DataResult.success(iPage);
     }

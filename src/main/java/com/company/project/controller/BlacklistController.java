@@ -77,7 +77,7 @@ public class BlacklistController {
     public DataResult findListByPage(@RequestBody BlacklistEntity blacklist){
         Page page = new Page(blacklist.getPage(), blacklist.getLimit());
         LambdaQueryWrapper<BlacklistEntity> queryWrapper = Wrappers.lambdaQuery();
-        //查询条件示例
+        //根据姓名模糊查询
         if(StringUtils.isNotBlank(blacklist.getXingming())) {
             queryWrapper.like(BlacklistEntity::getXingming, blacklist.getXingming());
         }

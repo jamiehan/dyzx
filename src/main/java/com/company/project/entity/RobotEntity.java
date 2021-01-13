@@ -28,7 +28,7 @@ public class RobotEntity extends BaseEntity implements Serializable {
 	 * 机器人信息编号
 	 */
 	@TableId("id")
-	private Integer id;
+	private String id;
 
 	/**
 	 * 机器人型号

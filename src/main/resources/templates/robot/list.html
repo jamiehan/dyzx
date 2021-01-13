@@ -6,7 +6,11 @@
   <title>Title</title>
   <link rel="stylesheet" href="/layui/css/layui.css">
   <link rel="stylesheet" href="/css/custom.form.css">
+    <style>
+        .table_div{margin-top:10px}
+    </style>
 </head>
+
 <body>
 <div class="panel panel-default operation" hidden>
   <div class="panel-heading title"></div>
@@ -87,7 +91,7 @@
   <div id="searchParam"  shiro:hasPermission="robot:list">
     <div class="layui-form-item">
       <div class="layui-input-inline">
-        <input type="text" id="key" class="layui-input"  autocomplete="off" placeholder="请输入">
+        <input type="text" id="key" class="layui-input"  autocomplete="off" placeholder="请输入机器人编号">
       </div>
 
       <div class="layui-input-inline ">
@@ -289,7 +293,7 @@
     //这里以搜索为例
     tableIns1.reload({
       where: { //设定异步数据接口的额外参数，任意设
-        key: $("#key").val()
+        bianhao: $("#key").val()
       }
       , page: {
         curr: 1 //重新从第 1 页开始

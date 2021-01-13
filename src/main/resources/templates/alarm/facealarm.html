@@ -191,14 +191,41 @@
 
             $("#blackListId").html(data.blacklistEntity.blackid);
             $("#name").html(data.blacklistEntity.xingming);
-            $("#sex").html(data.blacklistEntity.xingbie);
+            //性别
+            if(data.blacklistEntity.xingbie == 1) {
+                $("#sex").html("男");
+            } else if (data.blacklistEntity.xingbie == 2){
+                $("#sex").html("女");
+            } else {
+                $("#sex").html("不明");
+            }
+
             $("#idCard").html(data.blacklistEntity.shenfenzheng);
             $("#bornDate").html(data.blacklistEntity.chushengriqi);
             $("#recCompany").html(data.blacklistEntity.jiaokongdw);
             $("#recDate").html(data.blacklistEntity.jiaokongriqi);
             $("#telephone").html(data.blacklistEntity.danweidh);
-            $("#checkType").html(data.blacklistEntity.chakonglx);
-            $("#dealType").html(data.blacklistEntity.chuzhi);
+
+            //查控类型
+            if(data.blacklistEntity.chakonglx == 0) {
+                $("#checkType").html("犯罪嫌疑人");
+            } else if (data.blacklistEntity.chakonglx == 1){
+                $("#checkType").html("走失");
+            }
+
+            //处置类型
+            if(data.blacklistEntity.chuzhi == 0) {
+                $("#dealType").html("作废");
+            } else if (data.blacklistEntity.chuzhi == 1){
+                $("#dealType").html("现场控制");
+            } else if (data.blacklistEntity.chuzhi == 2){
+                $("#dealType").html("跟踪");
+            } else if (data.blacklistEntity.chuzhi == 3){
+                $("#dealType").html("仅通知单位");
+            } else if (data.blacklistEntity.chuzhi == 4){
+                $("#dealType").html("记录在案");
+            }
+
             $("#note").html(data.blacklistEntity.beizhu);
 
 

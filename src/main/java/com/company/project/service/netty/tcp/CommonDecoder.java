@@ -3,9 +3,11 @@ package com.company.project.service.netty.tcp;
 import com.company.project.common.utils.ByteUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
+import java.util.Base64;
 import java.util.List;
 
 /***
@@ -21,7 +23,7 @@ public class CommonDecoder extends ByteToMessageDecoder {
     private int otherPort;
 
     // 帧头
-    byte[] header= new byte[]{0x5A,0x5A};
+    byte[] header= new byte[]{0x5B,0x5B};
 
     public CommonDecoder(int faceRecogPort, int otherPort) {
         this.faceRecogPort = faceRecogPort;
@@ -44,7 +46,9 @@ public class CommonDecoder extends ByteToMessageDecoder {
                 return ;
             }
             //不是固定的包头，则直接丢弃掉该数据，防止污染到后边的数据包长计算
-            if(!data.startsWith(header.toString())){
+//            String strHeader = Base64.getEncoder().encodeToString(header);
+            String strHeader = ByteBufUtil.hexDump(header);
+            if(!data.startsWith( strHeader )){
                 byteBuf.readBytes(byteBuf.readableBytes());
                 return ;
             }
@@ -61,14 +65,18 @@ public class CommonDecoder extends ByteToMessageDecoder {
             }
             //如果长度超过该包长，则发生了粘包 当普通处理 只取固定长度
             outMsg = data.substring(0,dataLen + 12);
-            byteBuf.readBytes(dataLen + 12);
-
+//            byteBuf.readBytes(dataLen + 12);
+//            ctx.channel().writeAndFlush(byteBuf);
+            byte[] allByte = new byte[(byteBuf.readableBytes())];
+            byteBuf.getBytes(0, allByte);
+            out.add(byteBuf);
         }else if(port == otherPort){
             //TODO 其他端口解码
         }
         if(outMsg != null){
-            out.add(outMsg);
+//            out.add(outMsg);
         }
+
         // CHECKSTYLE:ON
     }
 

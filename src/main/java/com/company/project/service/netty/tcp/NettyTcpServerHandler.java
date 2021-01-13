@@ -104,8 +104,8 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
 
     // 帧尾
     byte[] tail= new byte[]{(byte) 0xB5,(byte) 0xB5};
-    // 一次完整数据长度
-    private int onetimeDataLen = 0;
+//    // 一次完整数据长度
+//    private int onetimeDataLen = 0;
 
 //    public NettyTcpServerHandler(WsHandler wsHandler) {
 //        this.wsHandler = wsHandler;
@@ -144,15 +144,24 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
 //        }
 
 
-        byte[] onetimeData = new byte[onetimeDataLen];
+//        byte[] onetimeData = new byte[onetimeDataLen];
 
-        //获取数据长度
+/*        //获取数据长度
         byte[] dataLenByte = new byte[4];
         byteBuf.getBytes(4, dataLenByte, 0, 4);
-        int dataLen = ByteUtils.bytesToInt(dataLenByte);
-        //获取数据
-        byte[] dataByteArray = new byte[dataLen];
-        byteBuf.getBytes(8, dataByteArray, 0, dataLen);
+        int dataLen = ByteUtils.bytesToInt(dataLenByte);*/
+        //获取头部8个字节数据
+        ByteBuf headByteBuf = byteBuf.readBytes(8);
+        //读取内容和尾部的长度
+        int bodyAndTailLen = byteBuf.readableBytes();
+        //获取内容数据（校验位和尾部占用4个字节）
+        ByteBuf bodyByteBuf = byteBuf.readBytes(bodyAndTailLen - 4);
+        //获取尾部数据
+        ByteBuf tailByteBuf = byteBuf.readBytes(4);
+        //读取内容字节缓存到字节数组中
+        byte[] dataByteArray = new byte[bodyByteBuf.readableBytes()];
+        bodyByteBuf.readBytes(dataByteArray);
+//        byteBuf.getBytes(8, dataByteArray, 0, dataLen);
 //        ByteBuf dataByteBuf = new ByteBuf();
 
 
@@ -161,7 +170,7 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
 //        String deviceName = byteBuf.toString(0, 1024, CharsetUtil.CHARSET_ISO_8859_1);
 ////        Long deviceId = nettyTcpServerHandler.driverContext.getDeviceIdByName(deviceName);
 //        String hexKey = ByteBufUtil.hexDump(byteBuf, 22, 1);
-
+        //获取监听的端口号
         SocketAddress socketAddress = context.channel().localAddress();
         String s = socketAddress.toString();
         String[] addrAndPort = s.split(":");
@@ -171,6 +180,7 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
                 Channel channel = context.channel();
 
 //                String jsonStr = byteBuf.toString(CharsetUtil.CHARSET_UTF_8);
+
                 JSONObject jsonObj = JSONObject.parseObject(new String(dataByteArray));
                 ActionEnum action = ActionEnum.valueOf("FACERECOGNITION");
 
@@ -185,13 +195,13 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
 
                             // TODO 根据personId查询当前所识别的人是否在黑名单中
                             BlacklistEntity  blacklistEntity= blacklistService.getBlackListByPersonId(personId);
-                            if ( blacklistEntity != null ) {
+//                            if ( blacklistEntity != null ) {
 
                                 faceMap.put("faceRecognitionResultVO",vo);
                                 faceMap.put("blacklistEntity",blacklistEntity);
                                 //TODO 推送人脸报警信息到前台
                                 wsHandler.sendMsg(faceMap);
-                            }
+//                            }
                         }
 
                         break;
