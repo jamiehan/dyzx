@@ -83,18 +83,11 @@ public class BlacklistController {
         if(StringUtils.isNotBlank(blacklist.getXingming())) {
             queryWrapper.like(BlacklistEntity::getXingming, blacklist.getXingming());
         }
+        //根据身份证模糊查询
+        if(StringUtils.isNotBlank(blacklist.getShenfenzheng())) {
+            queryWrapper.like(BlacklistEntity::getShenfenzheng, blacklist.getShenfenzheng());
+        }
         IPage<BlacklistEntity> iPage = blacklistService.page(page, queryWrapper);
-/*        List<BlacklistEntity> blacklistEntityList = iPage.getRecords();
-        blacklistEntityList.stream().map(x -> {
-            if (x.getXingbie() == 1) {
-                x.setStrSex("男");
-            } else if (x.getXingbie() == 2) {
-                x.setStrSex("女");
-            } else {
-                x.setStrSex("不明");
-            }
-            return x;
-        }).collect(Collectors.toList());*/
         return DataResult.success(iPage);
     }
 

@@ -92,7 +92,7 @@ public class BlacklistEntity extends BaseEntity implements Serializable {
 	private String beizhu;
 
 	/**
-	 * 人脸识别唯一ID
+	 * 人脸识别ID
 	 */
 	@TableField("person_id")
 	private String personId;

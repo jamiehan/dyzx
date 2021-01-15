@@ -128,6 +128,10 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext context, Object msg) {
         ByteBuf byteBuf = (ByteBuf) msg;
 
+        byte[] allByteArr = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, allByteArr);
+        String allStr = new String(allByteArr,"UTF-8");
+        System.out.println("收到的数据（字符串表示）：" + allStr);
         //TODO数据校验
 /*        //判断数据帧头是否为0x5B,0x5B
         byte[] headerByte = new byte[2];
@@ -174,6 +178,7 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
         SocketAddress socketAddress = context.channel().localAddress();
         String s = socketAddress.toString();
         String[] addrAndPort = s.split(":");
+        String dataStr = new String(dataByteArray,"UTF-8");
 
         switch (Integer.parseInt(addrAndPort[1])) {
             case 6281:

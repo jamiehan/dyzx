@@ -26,8 +26,13 @@
 
             <label class="layui-form-label">性别</label>
             <div class="layui-input-block">
-                <input type="radio" name="xingbie" value="1" title="男" checked="">
-                <input type="radio" name="xingbie" value="2" title="女">
+                <select name="xingbie" lay-filter="xingbie">
+                    <option value=""></option>
+                    <option value="1" selected="">男</option>
+                    <option value="2">女</option>
+                </select>
+                <!--<input type="radio" name="xingbie" value="1" title="男" checked="">
+                <input type="radio" name="xingbie" value="2" title="女">-->
                 <!--<input type="radio" name="xingbie" value="0" title="不明">-->
             </div>
 
@@ -58,7 +63,12 @@
         <div class="layui-form-item">
       <label class="layui-form-label">查控类型</label>
       <div class="layui-input-block">
-        <input type="chakonglx" name="chakonglx" placeholder="请输入查控类型" autocomplete="off" class="layui-input">
+          <select name="chakonglx" lay-filter="chakonglx">
+              <option value=""></option>
+              <option value="0" selected="">犯罪嫌疑人</option>
+              <option value="1">走失</option>
+          </select>
+        <!--<input type="chakonglx" name="chakonglx" placeholder="请输入查控类型" autocomplete="off" class="layui-input">-->
       </div>
     </div>
         <div class="layui-form-item">
@@ -82,7 +92,13 @@
         <div class="layui-form-item">
       <label class="layui-form-label">处置类型</label>
       <div class="layui-input-block">
-        <input type="chuzhi" name="chuzhi" placeholder="请输入处置类型" autocomplete="off" class="layui-input">
+          <select name="chuzhi" lay-filter="chuzhi">
+              <option value=""></option>
+              <option value="0" selected="">作废</option>
+              <option value="1">现场控制</option>
+              <option value="2">跟踪</option>
+          </select>
+        <!--<input type="chuzhi" name="chuzhi" placeholder="请输入处置类型" autocomplete="off" class="layui-input">-->
       </div>
     </div>
         <div class="layui-form-item">
@@ -92,9 +108,9 @@
       </div>
     </div>
         <div class="layui-form-item">
-      <label class="layui-form-label">人脸识别唯一ID</label>
+      <label class="layui-form-label">人脸识别ID</label>
       <div class="layui-input-block">
-        <input type="personId" name="personId" placeholder="请输入人脸识别唯一ID" autocomplete="off" class="layui-input">
+        <input type="personId" name="personId" placeholder="请输入人脸识别ID" autocomplete="off" class="layui-input">
       </div>
     </div>
   <div class="layui-form-item">
@@ -111,8 +127,11 @@
   <div id="searchParam"  shiro:hasPermission="blacklist:list">
     <div class="layui-form-item">
       <div class="layui-input-inline">
-        <input type="text" id="key" class="layui-input"  autocomplete="off" placeholder="请输入姓名">
+        <input type="text" id="key_name" class="layui-input"  autocomplete="off" placeholder="请输入姓名">
       </div>
+    <div class="layui-input-inline">
+        <input type="text" id="key_idCard" class="layui-input"  autocomplete="off" placeholder="请输入身份证号">
+    </div>
 
       <div class="layui-input-inline ">
         <button class="layui-btn" onclick="search()"  id="search">查询</button>
@@ -173,16 +192,45 @@
           {type: 'checkbox', fixed: 'left'},
           {field: 'blackid', title: '黑名单编号', sort: true},
           {field: 'xingming', title: '姓名', sort: true},
-          {field: 'xingbie', title: '性别', sort: true},
+          {field: 'xingbie', title: '性别', sort: true,
+              templet: function(res) {
+                  if(res.xingbie == '1') {
+                      return '男';
+                  } else if(res.xingbie == '2') {
+                      return '女';
+                  } else {
+                      return '不明';
+                  }
+              }},
           {field: 'shenfenzheng', title: '身份证', sort: true},
           {field: 'chushengriqi', title: '出生日期', sort: true},
-          {field: 'chakonglx', title: '查控类型', sort: true},
+          {field: 'chakonglx', title: '查控类型', sort: true,
+              templet: function(res) {
+                  if(res.chakonglx == '0') {
+                      return '犯罪嫌疑人';
+                  } else if(res.chakonglx == '1') {
+                      return '走失';
+                  } else {
+                      return '';
+                  }
+              }},
           {field: 'jiaokongdw', title: '交控单位', sort: true},
           {field: 'jiaokongriqi', title: '交控日期', sort: true},
           {field: 'danweidh', title: '单位电话', sort: true},
-          {field: 'chuzhi', title: '处置类型', sort: true},
+          {field: 'chuzhi', title: '处置类型', sort: true,
+              templet: function(res) {
+                  if(res.chuzhi == '0') {
+                      return '作废';
+                  } else if(res.chuzhi == '1') {
+                      return '现场控制';
+                  } else if(res.chuzhi == '2') {
+                      return '跟踪';
+                  } else {
+                      return '';
+                  }
+              }},
           {field: 'beizhu', title: '备注', sort: true},
-          {field: 'personId', title: '人脸识别唯一ID', sort: true},
+          {field: 'personId', title: '人脸识别ID', sort: true},
           {width: 120, toolbar: "#tool", title: '操作'}
         ]
       ]
@@ -216,7 +264,8 @@
           // $(".operation input[name=xingbie]").val("2");
           $(".operation input[name=shenfenzheng]").val("");
           $(".operation input[name=chushengriqi]").val("");
-          $(".operation input[name=chakonglx]").val("");
+          // $(".operation input[name=chakonglx]").val("");
+            $(".operation select[name=chakonglx]").val("");
           $(".operation input[name=jiaokongdw]").val("");
           $(".operation input[name=jiaokongriqi]").val("");
           $(".operation input[name=danweidh]").val("");
@@ -260,7 +309,8 @@
       //原先分页limit
       var exportParams = {
         limit: 10000,
-        key: $("#key").val()
+        xingming: $("#key_name").val(),
+        shenfenzheng: $("#key_idCard").val()
       };
       CoreUtil.sendPost("/blacklist/listByPage", exportParams, function (res) {
         //初始化渲染数据
@@ -318,7 +368,8 @@
     //这里以搜索为例
     tableIns1.reload({
       where: { //设定异步数据接口的额外参数，任意设
-        xingming: $("#key").val()
+        xingming: $("#key_name").val(),
+        shenfenzheng: $("#key_idCard").val()
       }
       , page: {
         curr: 1 //重新从第 1 页开始

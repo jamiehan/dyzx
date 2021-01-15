@@ -62,7 +62,19 @@
         <div class="layui-form-item">
       <label class="layui-form-label">在线状态</label>
       <div class="layui-input-block">
-        <input type="zaixianzhuangtai" name="zaixianzhuangtai" placeholder="请输入在线状态" autocomplete="off" class="layui-input">
+          <select name="zaixianzhuangtai" lay-filter="zaixianzhuangtai">
+              <option value=""></option>
+              <option value="0" selected="">运行</option>
+              <option value="1">运行停止</option>
+              <option value="2">未开机</option>
+              <option value="3">充电</option>
+              <option value="4">故障</option>
+              <option value="5">定位故障</option>
+              <option value="6">导航故障</option>
+              <option value="7">传感器故障</option>
+              <option value="8">系统故障</option>
+          </select>
+<!--        <input type="zaixianzhuangtai" name="zaixianzhuangtai" placeholder="请输入在线状态" autocomplete="off" class="layui-input">-->
       </div>
     </div>
         <div class="layui-form-item">
@@ -159,7 +171,30 @@
           {field: 'ruanjianbanb', title: '软件版本号', sort: true},
           {field: 'suosudw', title: '所属单位', sort: true},
           {field: 'gongzuodidian', title: '工作地点', sort: true},
-          {field: 'zaixianzhuangtai', title: '在线状态', sort: true},
+          {field: 'zaixianzhuangtai', title: '在线状态', sort: true,
+              templet: function(res) {
+                  if(res.zaixianzhuangtai == '0') {
+                      return '运行';
+                  } else if(res.zaixianzhuangtai == '1') {
+                      return '运行停止';
+                  } else if(res.zaixianzhuangtai == '2') {
+                      return '未开机';
+                  } else if(res.zaixianzhuangtai == '3') {
+                      return '充电';
+                  } else if(res.zaixianzhuangtai == '4') {
+                      return '故障';
+                  } else if(res.zaixianzhuangtai == '5') {
+                      return '定位故障';
+                  } else if(res.zaixianzhuangtai == '6') {
+                      return '导航故障';
+                  } else if(res.zaixianzhuangtai == '7') {
+                      return '传感器故障';
+                  } else if(res.zaixianzhuangtai == '8') {
+                      return '系统故障';
+                  } else {
+                      return '';
+                  }
+              }},
           {field: 'yunxinglicheng', title: '运行里程', sort: true},
           {field: 'beizhu', title: '备注', sort: true},
           {width: 120, toolbar: "#tool", title: '操作'}
