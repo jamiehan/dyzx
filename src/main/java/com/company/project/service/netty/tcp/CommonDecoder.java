@@ -68,14 +68,14 @@ public class CommonDecoder extends ByteToMessageDecoder {
             }
             //如果长度超过该包长，则发生了粘包 当普通处理 只取固定长度
             outMsg = data.substring(0,(dataLen + 12)*2);
-//            byteBuf.readBytes(dataLen + 12);
+            ByteBuf oneDataByteBuf = byteBuf.readBytes(dataLen + 12);
 //            ctx.channel().writeAndFlush(byteBuf);
-            byte[] allByte = new byte[(byteBuf.readableBytes())];
-            byteBuf.getBytes(0, allByte);
-            System.out.println("收到的数据（十六进制表示）：" + data);
+            byte[] allByte = new byte[(oneDataByteBuf.readableBytes())];
+            oneDataByteBuf.getBytes(0, allByte);
+            System.out.println("收到的数据（十六进制表示）：" + outMsg);
             String allStr = new String(allByte,"UTF-8");
             System.out.println("收到的数据（字符串表示）：" + allStr);
-            out.add(byteBuf);
+            out.add(oneDataByteBuf);
         }else if(port == otherPort){
             //TODO 其他端口解码
         }

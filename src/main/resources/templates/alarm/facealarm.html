@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/layui/css/layui.css" media="all">
 </head>
 <script src="/js/jquery.js"></script>
+<script src="/js/date.format.js"></script>
 <style>
     .face-image-area {
         height:300px;
@@ -65,16 +66,20 @@
                 <div class="layui-col-md2"><span id="sex"></span></div>
             </div>
             <div class="layui-row">
-                <div class="layui-col-md4">身份证:</div>
-                <div class="layui-col-md4"><span id="idCard"></span></div>
+                <div class="layui-col-md2">身份证:</div>
+                <div class="layui-col-md2"><span id="idCard"></span></div>
                 <div class="layui-col-md2">出生日期:</div>
                 <div class="layui-col-md2"><span id="bornDate"></span></div>
+                <div class="layui-col-md2">&nbsp;</div>
+                <div class="layui-col-md2">&nbsp;</div>
             </div>
             <div class="layui-row">
-                <div class="layui-col-md4">交控单位:</div>
-                <div class="layui-col-md4"><span id="recCompany"></span></div>
+                <div class="layui-col-md2">交控单位:</div>
+                <div class="layui-col-md2"><span id="recCompany"></span></div>
                 <div class="layui-col-md2">交控日期:</div>
                 <div class="layui-col-md2"><span id="recDate"></span></div>
+                <div class="layui-col-md2">&nbsp;</div>
+                <div class="layui-col-md2">&nbsp;</div>
             </div>
             <div class="layui-row">
                 <div class="layui-col-md2">单位电话:</div>
@@ -93,6 +98,27 @@
     </div>
 </div>
 <script>
+
+    Date.prototype.format = function(format) {
+        var o = {
+            "M+": this.getMonth() + 1,
+            "d+": this.getDate(),
+            "h+": this.getHours(),
+            "m+": this.getMinutes(),
+            "s+": this.getSeconds(),
+            "q+": Math.floor((this.getMonth() + 3) / 3),
+            "S": this.getMilliseconds()
+        }
+        if (/(y+)/.test(format)) {
+            format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+        for (var k in o) {
+            if (new RegExp("(" + k + ")").test(format)) {
+                format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+            }
+        }
+        return format;
+    }
 
    /* function loadFaceAlarm()
     {
@@ -201,9 +227,19 @@
             }
 
             $("#idCard").html(data.blacklistEntity.shenfenzheng);
-            $("#bornDate").html(data.blacklistEntity.chushengriqi);
+            let bornDate = "";
+            if( data.blacklistEntity.chushengriqi != null &&
+                data.blacklistEntity.chushengriqi != "") {
+                bornDate = new Date(parseInt(data.blacklistEntity.chushengriqi)).format("yyyy-MM-dd");
+            }
+            $("#bornDate").html(bornDate);
             $("#recCompany").html(data.blacklistEntity.jiaokongdw);
-            $("#recDate").html(data.blacklistEntity.jiaokongriqi);
+            let recDate = "";
+            if( data.blacklistEntity.jiaokongriqi != null &&
+                data.blacklistEntity.jiaokongriqi != "") {
+                recDate = new Date(parseInt(data.blacklistEntity.jiaokongriqi)).format("yyyy-MM-dd");
+            }
+            $("#recDate").html(recDate);
             $("#telephone").html(data.blacklistEntity.danweidh);
 
             //查控类型
@@ -263,6 +299,9 @@
                 var msg = data.msg;
                 console.log(msg);
             }*/
+
+
+
         }
     }
 

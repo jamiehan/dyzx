@@ -200,13 +200,13 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
 
                             // TODO 根据personId查询当前所识别的人是否在黑名单中
                             BlacklistEntity  blacklistEntity= blacklistService.getBlackListByPersonId(personId);
-//                            if ( blacklistEntity != null ) {
+                            if ( blacklistEntity != null ) {
 
                                 faceMap.put("faceRecognitionResultVO",vo);
                                 faceMap.put("blacklistEntity",blacklistEntity);
                                 //TODO 推送人脸报警信息到前台
                                 wsHandler.sendMsg(faceMap);
-//                            }
+                            }
                         }
 
                         break;
