@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.company.project.mapper.AlarminfoMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.company.project.entity.AlarminfoEntity" id="alarminfoMap">
+        <result property="alarmid" column="alarmid"/>
+        <result property="blackid" column="blackid"/>
+        <result property="blackname" column="blackname"/>
+        <result property="bianhao" column="bianhao"/>
+        <result property="baojingshijian" column="baojingshijian"/>
+        <result property="baojingdidian" column="baojingdidian"/>
+        <result property="baojingzuobiao" column="baojingzuobiao"/>
+        <result property="beizhu" column="beizhu"/>
+        <result property="baojingPIC" column="baojingPIC"/>
+        <result property="baojingType" column="baojingType"/>
+    </resultMap>
+
+
+</mapper>
