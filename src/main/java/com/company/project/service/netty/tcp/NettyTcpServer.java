@@ -100,7 +100,7 @@ public class NettyTcpServer {
                         @Override
                         protected void initChannel(SocketChannel channel) {
                             channel.pipeline().addLast(new CommonDecoder(Integer.parseInt(portArray[0]),Integer.parseInt(portArray[1])));
-                            channel.pipeline().addLast("ping",new IdleStateHandler(2,2,2*2, TimeUnit.SECONDS));
+                            channel.pipeline().addLast("ping",new IdleStateHandler(1,1,1*1, TimeUnit.SECONDS));
 //                            channel.pipeline().addLast(" framer",new DelimiterBasedFrameDecoder(Integer.MAX_VALUE,Unpooled.wrappedBuffer(new byte [] {'E','O','F','\n'})));
 ////                            channel.pipeline().addLast(new DelimiterBasedFrameDecoder(65535, Unpooled.copiedBuffer(header)));
 //                            channel.pipeline().addLast(new StringDecoder());

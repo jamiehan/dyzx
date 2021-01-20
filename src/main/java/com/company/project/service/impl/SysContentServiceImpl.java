@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 /**
  * 内容 服务类
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 @Service("sysContentService")
 public class SysContentServiceImpl extends ServiceImpl<SysContentMapper, SysContentEntity> implements SysContentService {

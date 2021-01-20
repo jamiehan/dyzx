@@ -8,9 +8,9 @@ import lombok.Data;
 /**
  * 返回值DataResult
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 @Data
 public class DataResult{

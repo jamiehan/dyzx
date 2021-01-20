@@ -13,6 +13,8 @@
         <result property="ruanjianbanb" column="ruanjianbanb"/>
         <result property="suosudw" column="suosudw"/>
         <result property="gongzuodidian" column="gongzuodidian"/>
+        <result property="contact" column="contact"/>
+        <result property="telephone" column="telephone"/>
         <result property="zaixianzhuangtai" column="zaixianzhuangtai"/>
         <result property="yunxinglicheng" column="yunxinglicheng"/>
         <result property="beizhu" column="beizhu"/>

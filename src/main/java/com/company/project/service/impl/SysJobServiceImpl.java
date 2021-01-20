@@ -19,9 +19,9 @@ import java.util.List;
 /**
  * 定时任务 服务类
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 @Service("sysJobService")
 public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJobEntity> implements SysJobService {

@@ -5,9 +5,9 @@ import java.util.List;
 /**
  * 代码生成 表数据
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 public class TableEntity {
 	//表的名称

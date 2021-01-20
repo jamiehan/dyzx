@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.company.project.common.utils.Constant;
+import com.company.project.entity.RobotEntity;
 import com.company.project.entity.SysRolePermission;
 import com.company.project.entity.SysUser;
 import com.company.project.entity.SysUserRole;
@@ -21,9 +22,9 @@ import java.util.Set;
 /**
  * session管理器
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 @Service
 public class HttpSessionService {
@@ -136,6 +137,35 @@ public class HttpSessionService {
     public String getCurrentUserId() {
         if (getCurrentSession() != null) {
             return getCurrentSession().getString(Constant.USERID_KEY);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 设置当前session信息 机器人
+     */
+    public void setCurrentRobot(RobotEntity robotEntity) {
+        if (getCurrentSession() != null) {
+            String userId = getCurrentSession().getString(Constant.USERID_KEY);
+
+            redisService.set("currentRobot#" + userId, JSONObject.toJSONString(robotEntity));
+        } else {
+            return;
+        }
+    }
+
+    /**
+     * 获取当前session信息 机器人
+     *
+     * @return robotCode
+     */
+    public RobotEntity getCurrentRobot() {
+        if (getCurrentSession() != null) {
+            String userId = getCurrentSession().getString(Constant.USERID_KEY);
+
+            String strCurrentObject = redisService.get("currentRobot#" + userId);
+            return JSONObject.parseObject(strCurrentObject, RobotEntity.class);
         } else {
             return null;
         }

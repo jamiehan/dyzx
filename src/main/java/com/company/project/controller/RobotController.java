@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.company.project.entity.BlacklistEntity;
+import com.company.project.service.HttpSessionService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import com.company.project.common.utils.DataResult;
 import com.company.project.entity.RobotEntity;
 import com.company.project.service.RobotService;
 
+import javax.annotation.Resource;
 
 
 /**
@@ -31,9 +33,12 @@ import com.company.project.service.RobotService;
 @Controller
 @RequestMapping("/")
 public class RobotController {
-    @Autowired
+
+    @Resource
     private RobotService robotService;
 
+    @Resource
+    private HttpSessionService httpSessionService;
 
     /**
     * 跳转到页面
@@ -41,6 +46,25 @@ public class RobotController {
     @GetMapping("/index/robot")
     public String robot() {
         return "robot/list";
+    }
+
+    @ApiOperation(value = "获取当前机器人信息")
+    @GetMapping("robot/getCurrentRobot")
+    @ResponseBody
+    public DataResult getCurrentRobotInfo(String robotCode){
+
+        RobotEntity robotEntity = null;
+        LambdaQueryWrapper<RobotEntity> queryWrapper = Wrappers.lambdaQuery();
+        //根据机器人编号查询
+        if(StringUtils.isNotBlank(robotCode)) {
+            queryWrapper.eq(RobotEntity::getBianhao, robotCode);
+            robotEntity = robotService.getOne(queryWrapper);
+
+            //保存当前选中的机器人信息
+            httpSessionService.setCurrentRobot(robotEntity);
+        }
+
+        return DataResult.success(robotEntity);
     }
 
     @ApiOperation(value = "新增")

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <title>主页</title>
@@ -275,22 +275,23 @@
                 <legend>机器人状态</legend>
                 <div class="layui-field-box">
                     <div class="layui-row">
+
                         <div class="layui-col-md1">机器人编号：</div>
-                        <div class="layui-col-md1">&nbsp;</div>
+                        <div class="layui-col-md1"><span id="robotCode" th:text="${code}"></span></div>
                         <div class="layui-col-md1">型号：</div>
-                        <div class="layui-col-md1">&nbsp;</div>
+                        <div class="layui-col-md1"><span id="type"></span></div>
                         <div class="layui-col-md1">在线状态：</div>
-                        <div class="layui-col-md1">&nbsp;</div>
+                        <div class="layui-col-md1"><span id="state"></span></div>
                         <div class="layui-col-md1">工作地点：</div>
-                        <div class="layui-col-md5">&nbsp;</div>
+                        <div class="layui-col-md5"><span id="location"></span></div>
                     </div>
                     <div class="layui-row">
                         <div class="layui-col-md1">所属单位：</div>
-                        <div class="layui-col-md3">&nbsp;</div>
+                        <div class="layui-col-md3"><span id="company"></span></div>
                         <div class="layui-col-md1">联系人：</div>
-                        <div class="layui-col-md1">&nbsp;</div>
+                        <div class="layui-col-md1"><span id="contact"></span></div>
                         <div class="layui-col-md1">电话：</div>
-                        <div class="layui-col-md5">&nbsp;</div>
+                        <div class="layui-col-md5"><span id="telephone"></span></div>
                     </div>
                 </div>
             </fieldset>
@@ -429,22 +430,22 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>wenbin</td>
+                        <td>Jamie</td>
                         <td>2020-03-18</td>
                         <td>人生就像是一场修行</td>
                     </tr>
                     <tr>
-                        <td>wenbin</td>
+                        <td>Jamie</td>
                         <td>2020-03-18</td>
                         <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
                     </tr>
                     <tr>
-                        <td>wenbin</td>
+                        <td>Jamie</td>
                         <td>2020-03-18</td>
                         <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
                     </tr>
                     <tr>
-                        <td>wenbin</td>
+                        <td>Jamie</td>
                         <td>2020-03-18</td>
                         <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
                     </tr>
@@ -456,7 +457,7 @@
                     <li class="layui-timeline-item">
                         <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
                         <div class="layui-timeline-content layui-text">
-                            <h3 class="layui-timeline-title">2020年3月18日</h3>
+                            <h3 class="layui-timeline-title">2020年11月25日</h3>
                             <p>
                                 一切准备工作似乎都已到位。发布之弦，一触即发。
                                 <br>不枉近百个日日夜夜与之为伴。因小而大，因弱而强。
@@ -498,6 +499,39 @@
     var canvas = document.getElementById('video');
     var url = 'ws://127.0.0.1:8080/videostream';
     var player = new JSMpeg.Player(url, {canvas: canvas});
+
+    var param = {"robotCode":$("#robotCode").html()};
+    CoreUtil.sendGet("/robot/getCurrentRobot/", param, function (res) {
+        //alert(res.data.bianhao);
+        // console.log(res.data.robotEntity);
+        $("#robotCode").html(res.data.bianhao);
+        $("#type").html(res.data.xinghao);
+        let state = "";
+        if(res.data.zaixianzhuangtai == '0') {
+            state = '运行';
+        } else if(res.data.zaixianzhuangtai == '1') {
+            state = '运行停止';
+        } else if(res.data.zaixianzhuangtai == '2') {
+            state = '未开机';
+        } else if(res.data.zaixianzhuangtai == '3') {
+            state = '充电';
+        } else if(res.data.zaixianzhuangtai == '4') {
+            state = '故障';
+        } else if(res.data.zaixianzhuangtai == '5') {
+            state = '定位故障';
+        } else if(res.data.zaixianzhuangtai == '6') {
+            state = '导航故障';
+        } else if(res.data.zaixianzhuangtai == '7') {
+            state = '传感器故障';
+        } else if(res.data.zaixianzhuangtai == '8') {
+            state = '系统故障';
+        }
+        $("#state").html(state);
+        $("#location").html(res.data.gongzuodidian);
+        $("#company").html(res.data.suosudw);
+        $("#contact").html(res.data.contact);
+        $("#telephone").html(res.data.telephone);
+    });
     
 </script>
 </body>

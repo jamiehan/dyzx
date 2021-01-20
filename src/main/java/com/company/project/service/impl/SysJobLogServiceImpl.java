@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 /**
  * 定时任务 服务类
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 @Service("sysJobLogService")
 public class SysJobLogServiceImpl extends ServiceImpl<SysJobLogMapper, SysJobLogEntity> implements SysJobLogService {

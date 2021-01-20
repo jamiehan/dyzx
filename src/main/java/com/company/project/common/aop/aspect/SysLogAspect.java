@@ -23,9 +23,9 @@ import java.lang.reflect.Method;
 /**
  * 日志切面
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 @Aspect
 @Component

@@ -6,9 +6,9 @@ import com.company.project.entity.SysDictDetailEntity;
 /**
  * 字典详情 Mapper
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 public interface SysDictDetailMapper extends BaseMapper<SysDictDetailEntity> {
 

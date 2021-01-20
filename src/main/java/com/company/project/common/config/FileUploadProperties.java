@@ -7,9 +7,9 @@ import org.springframework.util.StringUtils;
 /**
  * 文件上传参数配置类
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 @Component
 @ConfigurationProperties(prefix = "file")

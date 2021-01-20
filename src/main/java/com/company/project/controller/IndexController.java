@@ -1,5 +1,6 @@
 package com.company.project.controller;
 
+import com.company.project.service.HttpSessionService;
 import io.swagger.annotations.Api;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -8,17 +9,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 视图
  *
  * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 @Api(tags = "视图")
 @Controller
 @RequestMapping("/index")
 public class IndexController {
+
+    @Resource
+    private HttpSessionService httpSessionService;
+
+    @Resource
+    private HttpServletResponse response;
 
     @GetMapping("/login")
     public String logout() {
@@ -27,6 +38,13 @@ public class IndexController {
             return "redirect:/index/home" ;
         }
         return "login" ;
+    }
+
+    @GetMapping("/selectRobot")
+    public String selectRobot(Model model, String code) {
+//        System.out.println("当前选择的机器人编码是：" + code);
+        model.addAttribute("code",code);
+        return "main";
     }
 
     @GetMapping("/home")

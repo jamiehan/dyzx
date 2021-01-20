@@ -59,6 +59,18 @@
         <input type="gongzuodidian" name="gongzuodidian" placeholder="请输入工作地点" autocomplete="off" class="layui-input">
       </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系人</label>
+        <div class="layui-input-block">
+            <input type="contact" name="contact" placeholder="请输入联系人" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-block">
+            <input type="telephone" name="telephone" placeholder="请输入联系电话" autocomplete="off" class="layui-input">
+        </div>
+    </div>
         <div class="layui-form-item">
       <label class="layui-form-label">在线状态</label>
       <div class="layui-input-block">
@@ -171,6 +183,8 @@
           {field: 'ruanjianbanb', title: '软件版本号', sort: true},
           {field: 'suosudw', title: '所属单位', sort: true},
           {field: 'gongzuodidian', title: '工作地点', sort: true},
+          {field: 'contact', title: '联系人', sort: true},
+          {field: 'telephone', title: '电话', sort: true},
           {field: 'zaixianzhuangtai', title: '在线状态', sort: true,
               templet: function(res) {
                   if(res.zaixianzhuangtai == '0') {
@@ -232,6 +246,8 @@
           $(".operation input[name=ruanjianbanb]").val("");
           $(".operation input[name=suosudw]").val("");
           $(".operation input[name=gongzuodidian]").val("");
+          $(".operation input[name=contact]").val("");
+          $(".operation input[name=telephone]").val("");
           $(".operation input[name=zaixianzhuangtai]").val("");
           $(".operation input[name=yunxinglicheng]").val("");
           $(".operation input[name=beizhu]").val("");
@@ -259,6 +275,8 @@
           $(".operation input[name=ruanjianbanb]").val(data.ruanjianbanb);
           $(".operation input[name=suosudw]").val(data.suosudw);
           $(".operation input[name=gongzuodidian]").val(data.gongzuodidian);
+          $(".operation input[name=contact]").val(data.contact);
+          $(".operation input[name=telephone]").val(data.telephone);
           $(".operation input[name=zaixianzhuangtai]").val(data.zaixianzhuangtai);
           $(".operation input[name=yunxinglicheng]").val(data.yunxinglicheng);
           $(".operation input[name=beizhu]").val(data.beizhu);

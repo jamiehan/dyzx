@@ -6,9 +6,9 @@ import java.util.Date;
 /**
  * 日期处理
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 public class DateUtils {
 	/** 时间格式(yyyy-MM-dd HH:mm:ss) */

@@ -13,9 +13,9 @@ import java.util.concurrent.TimeUnit;
 /**
  * redis
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年12月18日
  */
 @Service
 public class RedisService {

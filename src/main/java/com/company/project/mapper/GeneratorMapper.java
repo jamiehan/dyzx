@@ -12,9 +12,9 @@ import java.util.Map;
 /**
  * 代码生成 Mapper
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 public interface GeneratorMapper extends BaseMapper<SysGenerator> {
 

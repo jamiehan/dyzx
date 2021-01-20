@@ -6,9 +6,9 @@ import com.company.project.entity.SysDictEntity;
 /**
  * 数据字典 服务类
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 public interface SysDictService extends IService<SysDictEntity> {
 

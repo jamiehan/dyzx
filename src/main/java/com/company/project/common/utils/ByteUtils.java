@@ -1,5 +1,12 @@
 package com.company.project.common.utils;
 
+import com.alibaba.fastjson.JSONArray;
+import com.company.project.common.constant.Common;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+
+import java.nio.ByteBuffer;
+
 public class ByteUtils {
 
     public static byte[] byteMergerAll(byte[]... values) {
@@ -48,6 +55,56 @@ public class ByteUtils {
                 r |= (buf[i] & 0x000000ff);
             }
         return r;
+    }
+
+    /**
+     * 编辑发送数据
+     * @param t
+     * @param <T>
+     * @return
+     */
+    public static <T> ByteBuf editSendData(String cmdType, T t) {
+        // 帧头
+        byte[] header= new byte[]{0x5B,0x5B};
+        // 方向（0x00:算法 -> 后台发送数据；0x01:后台 -> 算法发送数据）
+        byte[] direct = new byte[]{0x01};
+        // 类型
+        byte[] type = new byte[]{};
+        switch (cmdType){
+            case Common.CommandType.CMD:
+                // 类型 (0x90:命令帧)
+                type = new byte[]{(byte)0x90};
+                break;
+            case Common.CommandType.DATA:
+                // 类型 (0x91:数据帧)
+                type = new byte[]{(byte)0x91};
+                break;
+            case Common.CommandType.ACK:
+                // 类型 (0x92:响应帧)
+                type = new byte[]{(byte)0x92};
+                break;
+            default:
+        }
+
+        // CRC校验位
+        byte[] crc = new byte[]{0x00,0x00};
+        // 帧尾
+        byte[] tail= new byte[]{(byte) 0xB5,(byte) 0xB5};
+
+        byte[] content = new byte[]{};
+        byte[] size = new byte[]{};
+        if ( t != null) {
+            // 获取
+            String contStr = JSONArray.toJSON(t).toString();
+            content = contStr.getBytes();
+        }
+
+        int length = content.length;
+        size = ByteBuffer.allocate(4).putInt(length).array();
+
+        byte[] mergedData = ByteUtils.byteMergerAll(header, direct, type, size, content, crc, tail);
+
+        return Unpooled.unreleasableBuffer(Unpooled.copiedBuffer(mergedData));
     }
 
 }

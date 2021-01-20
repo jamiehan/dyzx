@@ -6,9 +6,9 @@ import com.company.project.entity.SysJobEntity;
 /**
  * 定时任务 Mapper
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 public interface SysJobMapper extends BaseMapper<SysJobEntity> {
 

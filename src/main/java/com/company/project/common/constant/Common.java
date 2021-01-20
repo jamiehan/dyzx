@@ -263,4 +263,17 @@ public interface Common {
         String DEVICE_STATUS_KEY_PREFIX = Cache.DEVICE + Cache.STATUS + Cache.SEPARATOR;
     }
 
+    /**
+     * 命令类型
+     */
+    interface CommandType {
+        //命令帧
+        String CMD = "CMD";
+        //数据帧
+        String DATA = "DATA";
+        //响应帧
+        String ACK = "ACK";
+
+    }
+
 }

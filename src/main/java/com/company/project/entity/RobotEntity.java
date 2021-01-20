@@ -73,6 +73,18 @@ public class RobotEntity extends BaseEntity implements Serializable {
 	private String gongzuodidian;
 
 	/**
+	 * 联系人
+	 */
+	@TableField("contact")
+	private String contact;
+
+	/**
+	 * 电话
+	 */
+	@TableField("telephone")
+	private String telephone;
+
+	/**
 	 * 在线状态
 	 */
 	@TableField("zaixianzhuangtai")

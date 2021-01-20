@@ -6,9 +6,9 @@ import com.company.project.entity.SysContentEntity;
 /**
  * 内容管理 Mapper
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 public interface SysContentMapper extends BaseMapper<SysContentEntity> {
 	

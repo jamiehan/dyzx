@@ -19,9 +19,9 @@ import javax.annotation.Resource;
 /**
  * 数据字典 服务类
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 @Service("sysDictDetailService")
 public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, SysDictDetailEntity> implements SysDictDetailService {

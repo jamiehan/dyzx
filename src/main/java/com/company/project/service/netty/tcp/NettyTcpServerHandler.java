@@ -30,6 +30,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.company.project.common.config.WsHandler;
 import com.company.project.common.constant.ActionEnum;
+import com.company.project.common.constant.Common;
 import com.company.project.common.utils.ByteUtils;
 import com.company.project.entity.BlacklistEntity;
 import com.company.project.service.BlacklistService;
@@ -351,10 +352,11 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
 
             if (event.state().equals(IdleState.READER_IDLE)) {
                 log.debug("------长期未收到服务器反馈数据------");
-                String loginMsg = "test server";//Login.login("admin", "admin");
+//                String loginMsg = "test server";//Login.login("admin", "admin");
+                ByteBuf sendData = ByteUtils.editSendData(Common.CommandType.DATA,null);
+                log.debug("------发送数据------" + sendData+"\r\n");
+                ctx.writeAndFlush(sendData);
 
-                log.debug("------发送登录信息------" + loginMsg+"\r\n");
-                ctx.writeAndFlush(getSendByteBuf(loginMsg.getBytes()));
                 //根据具体的情况 在这里也可以重新连接
             } else if (event.state().equals(IdleState.WRITER_IDLE)) {
                 log.debug("------长期未向服务器发送数据 发送心跳------");
@@ -388,6 +390,8 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
         }
         return a;
     }
+
+
 
 
 }

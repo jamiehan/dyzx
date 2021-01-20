@@ -2,10 +2,7 @@ package com.company.project.service.impl;
 
 import com.company.project.entity.SysDept;
 import com.company.project.entity.SysUser;
-import com.company.project.service.DeptService;
-import com.company.project.service.HomeService;
-import com.company.project.service.PermissionService;
-import com.company.project.service.UserService;
+import com.company.project.service.*;
 import com.company.project.vo.resp.HomeRespVO;
 import com.company.project.vo.resp.PermissionRespNode;
 import com.company.project.vo.resp.UserInfoRespVO;
@@ -18,9 +15,9 @@ import java.util.List;
 /**
  * 首页
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 @Service
 public class HomeServiceImpl implements HomeService {

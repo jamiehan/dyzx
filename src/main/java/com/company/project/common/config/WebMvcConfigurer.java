@@ -17,9 +17,9 @@ import java.util.List;
 /**
  * spring mvc 配置
  *
- * @author wenbin
+ * @author Jamie
  * @version V1.0
- * @date 2020年3月18日
+ * @date 2020年11月25日
  */
 @Configuration
 @EnableConfigurationProperties(FileUploadProperties.class)

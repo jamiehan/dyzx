@@ -2,6 +2,7 @@ package com.company.project.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.company.project.common.constant.Common;
 import com.company.project.common.utils.ByteUtils;
 import com.company.project.common.utils.DataResult;
 import com.company.project.entity.SysUser;
@@ -39,7 +40,7 @@ public class RobotOperationController {
         // 0: running 1:stop
         ptzControllerVO.setPtzStop(vo.getPtzStop());
 
-        channel.writeAndFlush(editSendData(ptzControllerVO));
+        channel.writeAndFlush(ByteUtils.editSendData(Common.CommandType.CMD, ptzControllerVO));
         //通过access_token拿userId
 //        String userId = httpSessionService.getCurrentUserId();
         DataResult result = DataResult.success();
@@ -49,33 +50,7 @@ public class RobotOperationController {
         return result;
     }
 
-    /**
-     * 编辑发送数据
-     * @param t
-     * @param <T>
-     * @return
-     */
-    public <T> ByteBuf editSendData(T t) {
-        // 帧头
-        byte[] header= new byte[]{0x5B,0x5B};
-        // 方向（0x00:算法 -> 后台发送数据；0x01:后台 -> 算法发送数据）
-        byte[] direct = new byte[]{0x01};
-        // 类型 (0x90:命令帧)
-        byte[] type = new byte[]{(byte)0x90};
-        // CRC校验位
-        byte[] crc = new byte[]{0x00,0x00};
-        // 帧尾
-        byte[] tail= new byte[]{(byte) 0xB5,(byte) 0xB5};
-        // 获取
-        String contStr = JSONArray.toJSON(t).toString();
-        byte[] content = contStr.getBytes();
-        int length = content.length;
-        byte[] size = ByteBuffer.allocate(4).putInt(length).array();
 
-        byte[] mergedData = ByteUtils.byteMergerAll(header, direct, type, size, content, crc, tail);
-
-        return Unpooled.unreleasableBuffer(Unpooled.copiedBuffer(mergedData));
-    }
 
 
 }
