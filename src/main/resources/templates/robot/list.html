@@ -29,6 +29,12 @@
         <input type="bianhao" name="bianhao" placeholder="请输入机器人编号" autocomplete="off" class="layui-input">
       </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">机器人IP地址</label>
+        <div class="layui-input-block">
+            <input type="ipaddress" name="ipaddress" placeholder="请输入机器人IP地址" autocomplete="off" class="layui-input">
+        </div>
+    </div>
         <div class="layui-form-item">
       <label class="layui-form-label">出厂日期</label>
       <div class="layui-input-block">
@@ -178,6 +184,7 @@
           {field: 'id', title: '机器人信息编号', sort: true},
           {field: 'xinghao', title: '机器人型号', sort: true},
           {field: 'bianhao', title: '机器人编号', sort: true},
+          {field: 'ipaddress', title: '机器人IP', sort: true},
           {field: 'chuchangriqi', title: '出厂日期', sort: true},
           {field: 'yingjianbanb', title: '硬件版本号', sort: true},
           {field: 'ruanjianbanb', title: '软件版本号', sort: true},
@@ -241,6 +248,7 @@
           $(".operation input[name=id]").val("");
           $(".operation input[name=xinghao]").val("");
           $(".operation input[name=bianhao]").val("");
+          $(".operation input[name=ipaddress]").val("");
           $(".operation input[name=chuchangriqi]").val("");
           $(".operation input[name=yingjianbanb]").val("");
           $(".operation input[name=ruanjianbanb]").val("");
@@ -270,6 +278,7 @@
           $(".operation input[name=id]").val(data.id);
           $(".operation input[name=xinghao]").val(data.xinghao);
           $(".operation input[name=bianhao]").val(data.bianhao);
+          $(".operation input[name=ipaddress]").val(data.ipaddress);
           $(".operation input[name=chuchangriqi]").val(data.chuchangriqi);
           $(".operation input[name=yingjianbanb]").val(data.yingjianbanb);
           $(".operation input[name=ruanjianbanb]").val(data.ruanjianbanb);

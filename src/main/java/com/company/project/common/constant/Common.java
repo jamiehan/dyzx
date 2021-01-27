@@ -276,4 +276,16 @@ public interface Common {
 
     }
 
+    /**
+     * 状态码类型
+     */
+    interface ActionType {
+        //人脸识别
+        String FACERECOGNITION = "recog_result";
+        //异物
+        String FOREIGNOBJECT = "";
+
+
+    }
+
 }

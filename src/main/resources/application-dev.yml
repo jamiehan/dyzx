@@ -58,3 +58,15 @@ file:
   #path: /data/files/ #linux
   #文件预览、下载的url, 末尾请勿加 /
   url: http://localhost:8080/files
+
+robot:
+  ffmpeg:
+    path: D:\software\ffmpeg\bin\
+  rtsp:
+    src:
+      addr: 192.168.10.64
+      user: admin
+      pwd: dyzx2018
+    dest:
+      addr: 127.0.0.1
+      port: 8080

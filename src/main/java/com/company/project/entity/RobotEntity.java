@@ -43,6 +43,12 @@ public class RobotEntity extends BaseEntity implements Serializable {
 	private String bianhao;
 
 	/**
+	 * 机器人IP地址
+	 */
+	@TableField("ipaddress")
+	private String ipaddress;
+
+	/**
 	 * 出厂日期
 	 */
 	@TableField("chuchangriqi")

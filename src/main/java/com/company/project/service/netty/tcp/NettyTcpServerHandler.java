@@ -34,6 +34,7 @@ import com.company.project.common.constant.Common;
 import com.company.project.common.utils.ByteUtils;
 import com.company.project.entity.BlacklistEntity;
 import com.company.project.service.BlacklistService;
+import com.company.project.service.RedisService;
 import com.company.project.vo.resp.FaceRecognitionResultVO;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -56,10 +57,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -99,6 +98,9 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
 
     @Resource
     private WsHandler wsHandler;
+
+    @Resource
+    private RedisService redisService;
 
     // 帧头
     byte[] header= new byte[]{0x5B,0x5B};
@@ -188,11 +190,11 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
 //                String jsonStr = byteBuf.toString(CharsetUtil.CHARSET_UTF_8);
 
                 JSONObject jsonObj = JSONObject.parseObject(new String(dataByteArray));
-                ActionEnum action = ActionEnum.valueOf("FACERECOGNITION");
+//                ActionEnum action = ActionEnum.valueOf("FACERECOGNITION");
 
-                switch (action) {
-                    // 人脸识别
-                    case FACERECOGNITION:
+                switch (jsonObj.getString("action")) {
+                    // 人脸识别recog_result
+                    case Common.ActionType.FACERECOGNITION:
                         String results = jsonObj.getString("results");
                         List<FaceRecognitionResultVO> faceRecognitionResultVOList = JSONObject.parseArray(results, FaceRecognitionResultVO.class);
                         Map<String,Object> faceMap = new ConcurrentHashMap<>();
@@ -205,6 +207,24 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
 
                                 faceMap.put("faceRecognitionResultVO",vo);
                                 faceMap.put("blacklistEntity",blacklistEntity);
+                                SocketAddress remoteAddress = channel.remoteAddress();
+                                String strRemoteAdd = remoteAddress.toString();
+                                String[] remoteAddrAndPort = strRemoteAdd.split(":");
+                                String strRemoteAddr = remoteAddrAndPort[0].substring(1);
+                                Date date = new Date();
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                                String strDate = sdf.format(date);
+                                String alarmInfoKey = "faceAlarm:" + strRemoteAddr + ":" + strDate;
+                                //TODO 保存人脸数据
+                                redisService.set(alarmInfoKey, JSONObject.toJSONString(faceMap));
+                                Map<String,String> alarmInfoMap = new ConcurrentHashMap<>();
+                                alarmInfoMap.put("alarmType","faceAlarm");
+                                alarmInfoMap.put("robotIpAddr",strRemoteAddr);
+                                alarmInfoMap.put("alarmInfoKey", alarmInfoKey);
+
+                                //TODO 推送人脸报警信息到前台
+                                wsHandler.sendMsg(alarmInfoMap);
+
                                 //TODO 推送人脸报警信息到前台
                                 wsHandler.sendMsg(faceMap);
                             }
@@ -213,7 +233,7 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
                         break;
 
                         // 异物
-                    case FOREIGNOBJECT:
+                    case Common.ActionType.FOREIGNOBJECT:
                         break;
                     default:
                         break;
@@ -332,6 +352,7 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         Channel channel = ctx.channel();
         System.out.println(channel.remoteAddress() +" 下线了");
+
     }
 
     public static String getIPString(ChannelHandlerContext ctx){

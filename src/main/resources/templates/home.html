@@ -17,17 +17,17 @@
         .layui-body {left: 200px;margin-top: 5px;}
         .layui-nav {padding: 0 0px;}
         .layui-nav-alarm {left: 260px;}
-        .layui-title {height: 60px; font-size:30px; padding: 0 15px; line-height: 60px; background-color: #330066!important; color: #ffffff;}
-        .layui-layout-right {background-color: #330066!important;}
+        .layui-title {height: 60px; font-size:30px; padding: 0 15px; line-height: 60px; background-color: #003399!important; color: #ffffff;}
+        .layui-layout-right {background-color: #003399!important;}
         .menu-layer {z-index: 10000}
-        .home-robot-content {background-color: #330066;}
+        .home-robot-content {background-color: #003399;}
         .layui-container {width: 100%; padding: 0 0px;}
         .home-left-menu {margin-top: 60px;}
         .home-robot-list {height: 100%; padding: 0 5px;}
         .home-robot-list-title {color:#FFFFFF; margin-top:10px; padding: 0 5px;}
         .home-robot-info {height: 100%; padding: 0 5px;}
 
-        .robot-control-body {background-color: #330066; bottom:0px;}
+        .robot-control-body {background-color: #003399; bottom:0px;}
         .robot-control-main {margin-top:60px; }
         .robot-control-set {margin-top:30px; height:620px; background-color: #9F9F9F}
         .robot-control-box {padding: 2px 2px;}
@@ -82,6 +82,9 @@
         .layui-tab-content {
             padding: 0px;
         }
+        /*.one-key-alarm > button{*/
+        /*    color: #ff5722;*/
+        /*}*/
 
         /*.onekeyalarmdiv { width:600px;height: 500px;margin-top:200px;margin-left:200px;display:block;z-index:1000;background-color: #9F9F9F}*/
     </style>
@@ -115,6 +118,7 @@
 
         var g_bSafari=false;
     </script>
+    <script src="/js/common.js"></script>
 </head>
 
 <body class="layui-layout-body">
@@ -152,9 +156,13 @@
             <div class="layuimini-tool-left"  onclick="iconHide()"><i class="icon-color layui-icon layui-icon-shrink-right" style="color:white" id="hide"></i></div>
         </a>
         <ul class="layui-nav layui-layout-left layui-nav-alarm">
-            <li class="layui-nav-item"><button data-method="setOnekeyAlarmTop" class="layui-btn">一键报警</button></li>
-            <li class="layui-nav-item"><button data-method="setFaceAlarmTop" class="layui-btn">人脸报警</button></li>
-            <li class="layui-nav-item"><a href="">温湿度有害气体报警</a></li>
+<!--            <audio id="alarmsound" autoplay="autoplay"></audio>-->
+            <audio controls id="alarmSoundPlayer"  muted style="display:none;">
+                <source src="/sound/alarm.wav"/>
+            </audio>
+            <li class="layui-nav-item one-key-alarm"><button data-method="setOnekeyAlarmTop" class="layui-btn">一键报警</button></li>
+            <li class="layui-nav-item face-alarm"><button data-method="setFaceAlarmTop" class="layui-btn">人脸报警</button></li>
+            <li class="layui-nav-item"><a href="">温湿度报警</a></li>
             <li class="layui-nav-item"><a href="">噪声报警</a></li>
             <li class="layui-nav-item"><a href="">安全帽报警</a></li>
             <li class="layui-nav-item"><a href="">异物报警</a></li>
@@ -162,6 +170,8 @@
             <li class="layui-nav-item"><a href="">指示灯报警</a></li>
             <li class="layui-nav-item"><a href="">热成像报警</a></li>
             <li class="layui-nav-item"><a href="">RFID报警</a></li>
+            <li class="layui-nav-item"><a href="">人员聚集报警</a></li>
+            <li class="layui-nav-item"><a href="">践踏草坪报警</a></li>
         </ul>
     </div>
 
@@ -450,6 +460,31 @@
 
 
 <script>
+/*    layui.use('layer',function(){
+        var layer = layui.layer;
+
+        layer.ready(function(){
+            layer.msg('很高兴一开场就见到你');
+        });
+
+    });*/
+
+/*    layui.use(['layer'], function(){
+        var layer = layui.layer;
+
+        layer.msg('Hello World');
+    });*/
+    /*layui.use('layer',function(){
+        var layer = layui.layer;
+
+        layer.open({
+            type: 1,
+            content: '传入任意的文本或html' //这里content是一个普通的String
+        });
+
+    });*/
+
+
     var layer = layui.layer;
     var $ = jQuery = layui.jquery;
     var form = layui.form;
@@ -462,6 +497,29 @@
         window.location.href = "/index/home"
     };
 
+
+
+    // this.setOnekeyAlarmTop();
+    // active.setFaceAlarmTop();
+    /*layui.use('util', function(){
+        var util = layui.util;
+
+        //处理属性 为 lay-active 的所有元素事件
+        util.event('data-method', {
+            setOnekeyAlarmTop: function(){
+                alert('触发了事件1');
+            }
+            ,e2: function(){
+                alert('触发了事件2');
+            }
+            ,e3: function(){
+                alert('触发了事件3');
+            }
+        });
+    });*/
+
+
+
     $(function () {
 
         // CoreUtil.sendGet2("http://192.168.1.102:8080/stream?topic=/camera/color/image_raw", null, function (res) {
@@ -470,6 +528,8 @@
         //     // $("#videoCanvas").append(data);
         //     // alert("1111");
         // });
+
+        // this.setFaceAlarmTop();
 
         FrameWH();
         //递归获取导航栏无线层级
@@ -683,6 +743,7 @@
                 });
             }
             ,setFaceAlarmTop: function(){
+                $(".face-alarm > button").css("color","#FFFFFF")
                 var that = this;
                 //多窗口模式，层叠置顶
                 layer.open({
@@ -711,6 +772,7 @@
                     ,zIndex: layer.zIndex //重点1
                     ,success: function(layero){
                         layer.setTop(layero); //重点2
+
                     }
                 });
             }
@@ -768,6 +830,71 @@
         });
 
     });
+
+
+    //var socketurl = "ws://192.168.1.58:8080/receivealarm";
+    var socketurl = "ws://" + SERVER_IP + ":" + SERVER_PORT + "/receivealarm";
+    var ws = null;
+    var xt = 0;
+    createWebSocket();
+    function createWebSocket(){
+        try {
+            ws = new WebSocket(socketurl);
+            initEventHandle();
+        } catch (e) {
+            reconnect();
+        }
+    }
+
+    function reconnect() {
+        //没连接上会一直重连，设置延迟避免请求过多
+        createWebSocket();
+
+    }
+    /*//心跳 防止长时间没有传输信息 断链接
+    setInterval(function(){
+        if(xt >= 2){
+            console.log("重新链接");
+            reconnect();
+            xt = 0;
+        }else{
+            // var txt = {'code':1005};
+            // ws.send(JSON.stringify(txt));//获取我的socketid
+            xt++;
+        }
+
+    },5000)*/
+    //初始化信息
+    function initEventHandle() {
+        ws.onopen = function (event) {
+            // alert("打开链接...");
+            //var txt = {'code':1001};
+            // ws.send(JSON.stringify(txt));//获取我的socketid
+        }
+        ws.onclose = function (event) {
+            // alert("关闭链接...");
+            //关闭的时候会调用这里
+            ws = new WebSocket(socketurl);
+        }
+
+        ws.onmessage = function (evt) {
+            //alert("收到消息...");
+            // alert(evt.data);
+            console.log("evt.data = " + evt.data);
+            // let data = JSON.parse(evt.data);
+           $(".face-alarm > button").css("color","#FF0000")
+
+            // var player = $("#alarmSoundPlayer")[0];
+            // player.play();
+            // $("#alarmSoundPlayer")[0].play();
+            var audioElement = document.createElement('audio');
+            audioElement.setAttribute('src', '/sound/alarm.wav');
+            audioElement.setAttribute('autoplay', 'autoplay'); //
+            audioElement.play();
+            // $("#alarmsound").src("alarm.wav");
+            // $("#alarmsound").play();
+        }
+    }
 
 
 

@@ -29,7 +29,7 @@ public class WebsocketConfiguration implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
 //        webSocketHandlerRegistry.addHandler(new WsHandler(),"/onekeyalarm","/videostream").addInterceptors(wsIntercept).setAllowedOrigins("*");
-        webSocketHandlerRegistry.addHandler(wsHandler,"/onekeyalarm","/videostream","facealarm").addInterceptors(wsIntercept).setAllowedOrigins("*");
+        webSocketHandlerRegistry.addHandler(wsHandler,"/receivealarm","/onekeyalarm","/videostream","facealarm").addInterceptors(wsIntercept).setAllowedOrigins("*");
     }
 
     @Bean

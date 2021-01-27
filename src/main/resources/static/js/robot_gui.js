@@ -3,8 +3,8 @@ var rosbridgePort = "9090";
 var mjpegPort = "8080";
 
 // Get the current hostname
-thisHostName = "192.168.1.102";//document.location.hostname;
-
+//thisHostName = "192.168.1.102";//document.location.hostname;
+thisHostName = "172.16.0.10";
 // If the rosbridge server is running on the webserver host, then this will
 // work.
 var rosbridgeHost = thisHostName;

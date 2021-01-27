@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script type="text/javascript" src="/js/pcmplayer.js"></script>
+    <script src="/js/common.js"></script>
 </head>
 <body>
 <button onclick="loadPCM()">接警</button>
@@ -18,7 +19,8 @@
         // 这是我搭载自己服务器上的server端，用来接收pcm数据
         // 如果起了example里面的本地server端，改成对应的ws地址就行了
         // var socketURL = 'wss://pkjy.xyz/websocket';
-        var socketURL = 'ws://192.168.1.58:8080/onekeyalarm';
+        //var socketURL = 'ws://192.168.1.58:8080/onekeyalarm';
+        var socketurl = "ws://" + SERVER_IP + ":" + SERVER_PORT + "/onekeyalarm";
 
         player = new PCMPlayer({
             inputCodec: 'Int8', //Int16

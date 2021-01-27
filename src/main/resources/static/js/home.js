@@ -470,7 +470,9 @@ function chargingPoint() {
 //摄像头控制
 function cameraCtrl(ptzstop, direction){
 
-    var param = {"robotIpAddress":"192.168.1.210",
+    var param = {
+        // "robotIpAddress":"192.168.1.210",
+        "robotCode":$("#robotCode").html(),
         "action":"PTZ",
         "ptzStop": ptzstop,
         "ptzControlType":direction,

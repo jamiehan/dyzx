@@ -8,7 +8,7 @@ spring:
       datasource:
         master:
           username: root
-          password: root
+          password: 8&z#C106
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://localhost:3306/dyzx?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2b8
         oracle:
@@ -54,10 +54,22 @@ spring:
 
 file:
   #文件上传目录 绝对路径 末尾请加 /
-  path: F:/files/ #windows
+  path: C:/files/ #windows
   #path: /data/files/ #linux
   #文件预览、下载的url, 末尾请勿加 /
   url: http://localhost:8080/files
 
 knife4j:
   production: true #生成环境禁用查看文档
+
+robot:
+  ffmpeg:
+    path: C:\dyzx\software\ffmpeg\bin\
+  rtsp:
+    src:
+      addr: 172.16.0.10
+      user: admin
+      pwd: dyzx2018
+    dest:
+      addr: 101.200.59.132
+      port: 8080

@@ -35,6 +35,16 @@
 
         var g_bSafari=false;
     </script>
+    <link href="/css/video-js.min.css" rel="stylesheet">
+   <script src="/js/videojs-ie8.min.js"></script>
+   <script src="/js/video.min.js"></script>
+   <script src="/js/zh-CN.js"></script>
+    <script src="/js/videojs-flash.js"></script>
+  <!-- <script src="jquery-1.11.1.min.js"></script>-->
+
+   <script>
+        videojs.options.flash.swf = "video-js.swf";//全局方式覆盖 SWF文件在Flash技术位置的位置
+   </script>
 </head>
 <style>
     .layui-top-box {padding:40px 20px 20px 20px;color:#fff}
@@ -58,17 +68,17 @@
     .layui-body {left: 0px;}
     .layui-nav {padding: 0 0px;}
     .layui-nav-alarm {left: 260px;}
-    .layui-title {height: 60px; font-size:30px; padding: 0 15px; line-height: 60px; background-color: #330066!important; color: #ffffff;}
-    .layui-layout-right {background-color: #330066!important;}
+    .layui-title {height: 60px; font-size:30px; padding: 0 15px; line-height: 60px; background-color: #003399!important; color: #ffffff;}
+    .layui-layout-right {background-color: #003399!important;}
     .menu-layer {z-index: 10000}
-    .home-robot-content {background-color: #330066;}
+    .home-robot-content {background-color: #003399;}
     .layui-container {width: 100%; padding: 0 0px;}
     .home-left-menu {margin-top: 60px;}
     .home-robot-list {height: 100%; padding: 0 5px;}
     .home-robot-list-title {color:#FFFFFF; margin-top:10px; padding: 0 5px;}
     .home-robot-info {height: 100%; padding: 0 5px;}
 
-    .robot-control-body {background-color: #330066; top:0px;bottom:0px;}
+    .robot-control-body {background-color: #003399; top:0px;bottom:0px;}
     .robot-control-main {margin-top:0px; }
     .robot-control-set {margin-top:30px; height:620px; background-color: #9F9F9F}
     .robot-control-box {padding: 2px 2px;}
@@ -143,8 +153,25 @@
                     <!--                           autoplay="autoplay" loop="loop">-->
                     <!--                    </video>-->
                     <canvas id="video"></canvas>
+<!--                    <video controls preload="auto" autoplay="autoplay">-->
+<!--                        <source src="rtmp://127.0.0.1:1935/live/test" type="rtmp/flv">-->
+<!--                    </video>-->
+
+                   <!-- <div id="video_1_area" class="videoArea">
+                        <video id="example_video_1" class="video-js vjs-default-skin vjs-big-play-centered" controls style="width: 100%;height: 100%;" >
+                               &lt;!&ndash; RTMP直播源地址 截止至发稿前直播源仍然可用&ndash;&gt;
+                             &lt;!&ndash; <source src="rtmp://live.hkstv.hk.lxdns.com/live/hks1"> &ndash;&gt;
+                            <source src="rtmp://127.0.0.1:1935/live/test" type="rtmp/mp4">
+                            &lt;!&ndash; <source src="rtmp://192.168.234.131:1935/mytv/test1" type="rtmp/flv"> &ndash;&gt;
+                            <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="" target="_blank">supports HTML5 video</a></p>
+                        </video>
+                    </div>
+
+                    <div class="videoTips"></div>-->
+
                     <!--                    <img src="http://192.168.1.58:8555/testVideo"></img>-->
-                    <!--                    <img src="rtsp://admin:@192.168.1.101"></img>-->
+                                       <!-- <img src="rtsp://admin:@192.168.1.101"></img>-->
+                    <!--<img src="rtsp://admin:dyzx2018@192.168.10.64:554/MPEG-4/ch1/main/av_stream"></img>-->
                     <!--
                                         <object type='application/x-vlc-plugin' id='vlc' events='True'
                                                 width="500" height="600">
@@ -497,42 +524,117 @@
     init_ros();
 
     var canvas = document.getElementById('video');
-    var url = 'ws://127.0.0.1:8080/videostream';
+    var url = 'ws://101.200.59.132:8080/videostream';
+    // var url = 'rtmp://127.0.0.1:1935/live/test';
     var player = new JSMpeg.Player(url, {canvas: canvas});
 
     var param = {"robotCode":$("#robotCode").html()};
     CoreUtil.sendGet("/robot/getCurrentRobot/", param, function (res) {
         //alert(res.data.bianhao);
         // console.log(res.data.robotEntity);
-        $("#robotCode").html(res.data.bianhao);
-        $("#type").html(res.data.xinghao);
-        let state = "";
-        if(res.data.zaixianzhuangtai == '0') {
-            state = '运行';
-        } else if(res.data.zaixianzhuangtai == '1') {
-            state = '运行停止';
-        } else if(res.data.zaixianzhuangtai == '2') {
-            state = '未开机';
-        } else if(res.data.zaixianzhuangtai == '3') {
-            state = '充电';
-        } else if(res.data.zaixianzhuangtai == '4') {
-            state = '故障';
-        } else if(res.data.zaixianzhuangtai == '5') {
-            state = '定位故障';
-        } else if(res.data.zaixianzhuangtai == '6') {
-            state = '导航故障';
-        } else if(res.data.zaixianzhuangtai == '7') {
-            state = '传感器故障';
-        } else if(res.data.zaixianzhuangtai == '8') {
-            state = '系统故障';
+        if ( res.data != null ) {
+            $("#robotCode").html(res.data.bianhao);
+            $("#type").html(res.data.xinghao);
+            let state = "";
+            if(res.data.zaixianzhuangtai == '0') {
+                state = '运行';
+            } else if(res.data.zaixianzhuangtai == '1') {
+                state = '运行停止';
+            } else if(res.data.zaixianzhuangtai == '2') {
+                state = '未开机';
+            } else if(res.data.zaixianzhuangtai == '3') {
+                state = '充电';
+            } else if(res.data.zaixianzhuangtai == '4') {
+                state = '故障';
+            } else if(res.data.zaixianzhuangtai == '5') {
+                state = '定位故障';
+            } else if(res.data.zaixianzhuangtai == '6') {
+                state = '导航故障';
+            } else if(res.data.zaixianzhuangtai == '7') {
+                state = '传感器故障';
+            } else if(res.data.zaixianzhuangtai == '8') {
+                state = '系统故障';
+            }
+            $("#state").html(state);
+            $("#location").html(res.data.gongzuodidian);
+            $("#company").html(res.data.suosudw);
+            $("#contact").html(res.data.contact);
+            $("#telephone").html(res.data.telephone);
         }
-        $("#state").html(state);
-        $("#location").html(res.data.gongzuodidian);
-        $("#company").html(res.data.suosudw);
-        $("#contact").html(res.data.contact);
-        $("#telephone").html(res.data.telephone);
+
     });
     
 </script>
+<!--<script>
+             var options = {
+                        poster: '',            //未播放时 的封面
+               techOrder: ["flash", "html5"],    //定义Video.js技术首选的顺序。这意味着Html5首选技术
+               //autoplay: true,                    //播放器准备好之后，是否自动播放 【默认false】
+                    //controls: false,                 //是否显示控制栏
+               preload: 'auto',                //预加载
+                muted: true,                    //静音
+                language: "zh-CN",                //初始化语言
+                //fluid: true,
+               /*flash: {                        //指定Video.js SWF文件在Flash技术的位置
+                 swf: '//path/to/videojs.swf'
+              },*/
+                /*controlBar: {                     // 配置控制栏
+                    timeDivider: false, // 时间分割线
+                     durationDisplay: false, // 总时间
+                   progressControl: true, // 进度条
+                   customControlSpacer: true, // 未知
+                   fullscreenToggle: true // 全屏
+              },*/
+          }
+
+      var player = videojs('example_video_1', options, function(){
+          fillTips('<span>播放器1初始化成功</span>');
+          videojs.log('Your player is ready!');
+                setTimeout(function () {
+                   player.play();
+                }, 2000);
+
+              player.one("playing", function () {         // 监听播放
+                    fillTips('<span>播放器1开始播放</span>');
+                });
+             player.one("play", function () {         // 监听播放
+                   console.log('准备开始播放');
+                 });
+                player.on('pause', function () {
+                    console.log('暂停播放');
+                });
+               player.on('ended', function () {
+                   console.log('结束播放');
+                 });
+
+                 //&#45;&#45;&#45;&#45;&#45;&#45;events    绑定事件用on    移除事件用off
+                player.on('loadstart',function () {
+                   console.log('loadstart&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;')
+                  });
+                      player.on('loadedmetadata',function () {
+                            console.log('loadedmetadata-&#45;&#45;视频源数据加载完成&#45;&#45;&#45;&#45;')
+                           });
+                       player.on('loadeddata',function () {
+                            console.log('loadeddata-&#45;&#45;渲染播放画面&#45;&#45;&#45;&#45;');
+                           });
+                        player.on('progress',function () {
+                              console.log('progress-&#45;&#45;&#45;&#45;&#45;&#45;加载过程&#45;&#45;&#45;&#45;')
+                            });
+                        player.on('timeupdate',function () {
+                             const curTime = this.currentTime();
+                             //console.log('timeupdate-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;',curTime);
+                            })
+                       player.off('timeupdate',function () {
+                             console.log('off&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;timeupdate')
+                             })
+                        //this.play();
+                     });
+         </script>
+
+     <script>
+            function fillTips (str) {
+                    document.getElementsByClassName('videoTips')[0].innerHTML+=str+"<br/>";
+                }
+     </script>-->
 </body>
 </html>

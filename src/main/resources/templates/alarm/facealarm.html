@@ -7,6 +7,7 @@
 </head>
 <script src="/js/jquery.js"></script>
 <script src="/js/date.format.js"></script>
+<script src="/js/common.js"></script>
 <style>
     .face-image-area {
         height:300px;
@@ -159,7 +160,8 @@
         }
     }*/
 
-    var socketurl = "ws://192.168.1.58:8080/facealarm";
+    //var socketurl = "ws://192.168.1.58:8080/facealarm";
+    var socketurl = "ws://" + SERVER_IP + ":" + SERVER_PORT + "/facealarm";
     var ws = null;
     var xt = 0;
     createWebSocket();

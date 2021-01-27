@@ -30,6 +30,7 @@ spring:
         userToken: "user:token:"
         passwordError: "user:password:error:"
         permissionRefresh: "user:token:permissionRefresh:"
+        currentRobot: "user:token:currentRobot:"
       expire:
         userToken: 604800 # 7天 7*24*3600
         passwordError: 3600 # 一个小时
@@ -50,3 +51,5 @@ mybatis-plus:
 #使用代码生成模块时 指定要生成的表存在于哪种数据库，可选值有【mysql、oracle、sqlServer】
 project:
   database: mysql
+
+

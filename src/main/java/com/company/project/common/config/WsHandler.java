@@ -74,7 +74,7 @@ public class WsHandler extends BinaryWebSocketHandler {
         for (Map.Entry<String, WebSocketSession> sessionEntry : clients.entrySet()) {
             try {
                 WebSocketSession session = sessionEntry.getValue();
-                if (session.isOpen()) {
+                if (session.isOpen() && session.getUri().getPath().endsWith("/videostream")) {
                     session.sendMessage(binaryMessage);
                 }
             } catch (Exception e) {
@@ -87,6 +87,7 @@ public class WsHandler extends BinaryWebSocketHandler {
 //        BinaryMessage binaryMessage = new BinaryMessage(null);
 //        WebSocketMessage newMessage = new SocketMessage(data);
         TextMessage textMessage = new TextMessage(JSON.toJSONString(data));
+
         for (Map.Entry<String, WebSocketSession> sessionEntry : clients.entrySet()) {
             try {
                 WebSocketSession session = sessionEntry.getValue();

@@ -11,6 +11,9 @@ public class PTZControllerVO {
     /* 机器人ID */
     private String robotId;
 
+    /* 机器人编码 */
+    private String robotCode;
+
     /* 机器人IP地址 */
     private String robotIpAddress;
 
@@ -31,6 +34,14 @@ public class PTZControllerVO {
 
     public void setRobotId(String robotId) {
         this.robotId = robotId;
+    }
+
+    public String getRobotCode() {
+        return robotCode;
+    }
+
+    public void setRobotCode(String robotCode) {
+        this.robotCode = robotCode;
     }
 
     public String getRobotIpAddress() {

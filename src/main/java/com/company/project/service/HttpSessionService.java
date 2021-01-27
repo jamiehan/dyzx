@@ -52,6 +52,9 @@ public class HttpSessionService {
     @Value("${spring.redis.key.expire.permissionRefresh}")
     private Long redisPermissionRefreshExpire;
 
+    @Value("${spring.redis.key.prefix.currentRobot}")
+    private String redisCurrentRobotKey;
+
     public String createTokenAndUser(SysUser user, List<String> roles, Set<String> permissions) {
         //方便根据id找到redis的key， 修改密码/退出登陆 方便使用
         String token = getRandomToken() + "#" + user.getId();
@@ -146,13 +149,23 @@ public class HttpSessionService {
      * 设置当前session信息 机器人
      */
     public void setCurrentRobot(RobotEntity robotEntity) {
-        if (getCurrentSession() != null) {
-            String userId = getCurrentSession().getString(Constant.USERID_KEY);
 
-            redisService.set("currentRobot#" + userId, JSONObject.toJSONString(robotEntity));
+        String token = getTokenFromHeader();
+
+        if (org.apache.commons.lang.StringUtils.isNotEmpty(token)) {
+            redisService.set(redisCurrentRobotKey + token, JSONObject.toJSONString(robotEntity));
         } else {
             return;
         }
+
+//        if (getCurrentSession() != null) {
+//            String userId = getCurrentSession().getString(Constant.USERID_KEY);
+//
+//            redisService.set(redisCurrentRobotKey + token, JSONObject.toJSONString(robotEntity));
+//        } else {
+//            return;
+//        }
+
     }
 
     /**
@@ -161,14 +174,23 @@ public class HttpSessionService {
      * @return robotCode
      */
     public RobotEntity getCurrentRobot() {
-        if (getCurrentSession() != null) {
-            String userId = getCurrentSession().getString(Constant.USERID_KEY);
 
-            String strCurrentObject = redisService.get("currentRobot#" + userId);
+        String token = getTokenFromHeader();
+
+        if (org.apache.commons.lang.StringUtils.isNotEmpty(token)) {
+            String strCurrentObject = redisService.get(redisCurrentRobotKey + token);
             return JSONObject.parseObject(strCurrentObject, RobotEntity.class);
         } else {
             return null;
         }
+//        if (getCurrentSession() != null) {
+//            String userId = getCurrentSession().getString(Constant.USERID_KEY);
+//
+//            String strCurrentObject = redisService.get("currentRobot#" + userId);
+//            return JSONObject.parseObject(strCurrentObject, RobotEntity.class);
+//        } else {
+//            return null;
+//        }
     }
 
 
