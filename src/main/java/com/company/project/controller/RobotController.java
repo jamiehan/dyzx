@@ -87,6 +87,13 @@ public class RobotController {
             //保存当前选中的机器人信息
             httpSessionService.setCurrentRobot(robotEntity);
 
+//            new Thread(t->{
+//                public void run(){
+//                    pushVideoAsRTSP(robotEntity.getIpaddress());
+//                }
+//
+//            };
+
             this.pushVideoAsRTSP(robotEntity.getIpaddress());
         }
 
@@ -140,7 +147,7 @@ public class RobotController {
      * @param ipAddr
      * @return
      */
-    private Integer pushVideoAsRTSP(String ipAddr){
+    public Integer pushVideoAsRTSP(String ipAddr){
 
         int flag = -1;
         // ffmpeg位置，最好写在配置文件中

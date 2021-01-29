@@ -1,5 +1,6 @@
-//服务器IP
-//let SERVER_IP = "192.168.1.58";
-let SERVER_IP = "172.16.0.25";
+//测试机服务器IP
+let SERVER_IP = "192.168.1.58";
+//阿里云VPN地址
+//let SERVER_IP = "172.16.0.1";
 //服务器端口号
 let SERVER_PORT = "8080";
