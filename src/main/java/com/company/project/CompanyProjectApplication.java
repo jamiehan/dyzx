@@ -11,12 +11,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.net.InetAddress;
 
 @SpringBootApplication(exclude = DruidDataSourceAutoConfigure.class)
 @MapperScan("com.company.project.mapper")
 @Slf4j
+@EnableAsync
 public class CompanyProjectApplication {
 
     public static void main(String[] args) throws Exception{

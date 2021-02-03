@@ -17,6 +17,7 @@
 package com.company.project.service.netty.udp;
 
 import cn.hutool.core.util.CharsetUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.company.project.common.config.WsHandler;
 import com.company.project.common.utils.DriverUtils;
 import com.company.project.entity.AttributeInfo;
@@ -24,6 +25,7 @@ import com.company.project.entity.AttributeInfo;
 //import com.dc3.common.model.Point;
 //import com.dc3.common.sdk.bean.DriverContext;
 //import com.dc3.common.sdk.service.DriverService;
+import com.company.project.service.RedisService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.Channel;
@@ -48,9 +50,12 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 报文处理，需要视具体情况开发
@@ -100,6 +105,8 @@ public class NettyUdpServerHandler extends SimpleChannelInboundHandler<DatagramP
 //    private DriverService driverService;
 //    @Resource
 //    private DriverContext driverContext;
+    @Resource
+    private RedisService redisService;
 
     @Override
     @SneakyThrows
@@ -116,6 +123,23 @@ public class NettyUdpServerHandler extends SimpleChannelInboundHandler<DatagramP
         switch (recipientPort) {
             //接收机器人发送过来的音频，往浏览器客户端送
             case 6271:
+                System.out.println("接收到机器人发过来的语音。");
+
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                String strDate = sdf.format(date);
+                String alarmInfoKey = "onekeyAlarm:" + hostAddress + ":" + strDate;
+                //TODO 保存通话语音数据
+//                redisService.set(alarmInfoKey, "");
+
+                Map<String,String> alarmInfoMap = new ConcurrentHashMap<>();
+                alarmInfoMap.put("alarmType","onekeyAlarm");
+                alarmInfoMap.put("robotIpAddr",hostAddress);
+                alarmInfoMap.put("alarmInfoKey", alarmInfoKey);
+
+                // 推送一键报警信息到前台
+                wsHandler.sendMsg(alarmInfoMap);
+
 //                NettyUdpClient.getInstance();
 //                NettyUdpClientHandler.sendAudioData(byteBuf, new InetSocketAddress(robot_audio_device_host, robot_audio_device_port));
                 byteBuf.readBytes(data);
@@ -124,7 +148,7 @@ public class NettyUdpServerHandler extends SimpleChannelInboundHandler<DatagramP
                 break;
             //监听从浏览器客户端过来的音频数据，给机器人端发送
             case 6272:
-
+                System.out.println("声音已发送到服务器端");
                 Map<String, WebSocketSession> clients = wsHandler.getClients();
                 for (Map.Entry<String, WebSocketSession> sessionEntry : clients.entrySet()) {
                     try {
@@ -137,6 +161,7 @@ public class NettyUdpServerHandler extends SimpleChannelInboundHandler<DatagramP
                             byteBuf.readBytes(data);
                             java.net.DatagramPacket dp = new java.net.DatagramPacket(data, data.length, InetAddress.getByName(audioAddress),
                                     ROBOT_AUDIO_DEVICE_PORT);
+                            System.out.println("声音已从服务器端转发。目的地IP地址：" + audioAddress + ",端口号：" + ROBOT_AUDIO_DEVICE_PORT);
 
                             // 3，通过socket服务，将已有的数据包发送出去。通过send方法。
                             socket.send(dp);
@@ -184,20 +209,20 @@ public class NettyUdpServerHandler extends SimpleChannelInboundHandler<DatagramP
         AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_UNSIGNED, 11025, 8, 1, 1, 11025 ,false);
 //        AudioFormat format = new AudioFormat(11025F, 8, 1, false ,false);
 
-        SourceDataLine  auline = null;
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+//        SourceDataLine  auline = null;
+//        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 
-        try {
-            auline = (SourceDataLine) AudioSystem.getLine(info);
-            auline.open(format);
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-            return;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-        auline.start();
+//        try {
+//            auline = (SourceDataLine) AudioSystem.getLine(info);
+//            auline.open(format);
+//        } catch (LineUnavailableException e) {
+//            e.printStackTrace();
+//            return;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return;
+//        }
+//        auline.start();
 //        byte[] b = new byte[256];
         try {
 //            while(fis.read(b)>0) {
@@ -228,8 +253,8 @@ public class NettyUdpServerHandler extends SimpleChannelInboundHandler<DatagramP
     //                System.out.println(1);
             }
 
-            auline.drain();
-            auline.close();
+//            auline.drain();
+//            auline.close();
 
 //            context.channel().writeAndFlush(byteBuf);
 

@@ -18,6 +18,7 @@ package com.company.project.service.netty.udp;
 
 import com.company.project.common.config.WsHandler;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
@@ -54,8 +55,11 @@ public class NettyUdpServer {
 
     @SneakyThrows
     public void start() {
+//        EventLoopGroup bossGroup  = new NioEventLoopGroup();  // 用来接收进来的连接
+//        EventLoopGroup workerGroup  = new NioEventLoopGroup();// 用来处理已经被接收的连接
         EventLoopGroup group = new NioEventLoopGroup();
         try {
+//            ServerBootstrap bootstrap = new ServerBootstrap();//是一个启动NIO服务的辅助启动类
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(group)
                     .channel(NioDatagramChannel.class)

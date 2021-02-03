@@ -64,7 +64,7 @@ robot:
     path: D:\software\ffmpeg\bin\
   rtsp:
     src:
-      addr: 192.168.10.64
+      addr: 172.16.0.10
       user: admin
       pwd: dyzx2018
     dest:

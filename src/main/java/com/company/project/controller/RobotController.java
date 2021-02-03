@@ -8,6 +8,7 @@ import com.company.project.service.HttpSessionService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -25,6 +26,7 @@ import com.company.project.entity.RobotEntity;
 import com.company.project.service.RobotService;
 
 import javax.annotation.Resource;
+//import com.company.project.service.AsyncTaskService;
 
 
 /**
@@ -64,6 +66,9 @@ public class RobotController {
     @Value("${robot.rtsp.dest.port}")
     private String destPort;
 
+//    @Resource
+//    private AsyncTaskService asyncTaskService;
+
     /**
     * 跳转到页面
     */
@@ -87,13 +92,19 @@ public class RobotController {
             //保存当前选中的机器人信息
             httpSessionService.setCurrentRobot(robotEntity);
 
-//            new Thread(t->{
-//                public void run(){
-//                    pushVideoAsRTSP(robotEntity.getIpaddress());
-//                }
-//
-//            };
+       }
 
+        return DataResult.success(robotEntity);
+    }
+
+    @ApiOperation(value = "获取当前机器人视频")
+    @GetMapping("robot/getCurrentRobotVideo")
+    @ResponseBody
+    public DataResult getCurrentRobotVideo(String robotCode){
+
+        RobotEntity robotEntity = httpSessionService.getCurrentRobot();
+
+        if( robotEntity != null ) {
             this.pushVideoAsRTSP(robotEntity.getIpaddress());
         }
 
@@ -142,7 +153,7 @@ public class RobotController {
         return DataResult.success(iPage);
     }
 
-    /**
+    /*
      * 从摄像头往服务器推流
      * @param ipAddr
      * @return
@@ -166,7 +177,7 @@ public class RobotController {
             String command = ffmpegPath; // ffmpeg位置
             command += "ffmpeg "; // ffmpeg开头，-re代表按照帧率发送，在推流时必须有
             command += " -i \"" + videoSrc + "\""; // 指定要推送的视频
-            command += " -q 0 -f mpegts -codec:v mpeg1video -s 640x480 " + videoDest; // 指定推送服务器，-f：指定格式
+            command += " -q 0 -f mpegts -codec:v mpeg1video -s 200x150 " + videoDest; // 指定推送服务器，-f：指定格式
 
 //            command = ffmpegPath + "ffmpeg -i " + videoSrc + " -vcodec copy -acodec copy -f flv " + videoDest;
             System.out.println("ffmpeg推流命令：" + command);

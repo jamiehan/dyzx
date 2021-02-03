@@ -711,6 +711,7 @@
         //触发事件
         var active = {
             setOnekeyAlarmTop: function(){
+                $(".one-key-alarm > button").css("color","#FFFFFF")
                 var that = this;
                 //多窗口模式，层叠置顶
                 layer.open({
@@ -881,8 +882,14 @@
             //alert("收到消息...");
             // alert(evt.data);
             console.log("evt.data = " + evt.data);
-            // let data = JSON.parse(evt.data);
-           $(".face-alarm > button").css("color","#FF0000")
+            let retData = JSON.parse(evt.data);
+            // alert("retData=" + retData);
+            if ( "onekeyAlarm" == retData.alarmType ) {
+                $(".one-key-alarm > button").css("color","#FF0000")
+
+            } else if ("faceAlarm" == retData.alarmType ) {
+                $(".face-alarm > button").css("color","#FF0000")
+            }
 
             // var player = $("#alarmSoundPlayer")[0];
             // player.play();

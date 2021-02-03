@@ -55,7 +55,8 @@ public class WsHandler extends BinaryWebSocketHandler {
 
                     java.net.DatagramPacket dp = new java.net.DatagramPacket(data, data.length, address,
                             CLIENT_AUDIO_PORT);
-
+                    System.out.println("一键报警session的address信息：" + address.toString());
+                    System.out.println("声音已从机器人发送到客户端：客户端IP地址：" + address.getHostAddress() + ",端口号：" + CLIENT_AUDIO_PORT);
                     // 3，通过socket服务，将已有的数据包发送出去。通过send方法。
                     socket.send(dp);
                     // 4，关闭资源。
@@ -75,7 +76,9 @@ public class WsHandler extends BinaryWebSocketHandler {
             try {
                 WebSocketSession session = sessionEntry.getValue();
                 if (session.isOpen() && session.getUri().getPath().endsWith("/videostream")) {
-                    session.sendMessage(binaryMessage);
+                    synchronized (session) {
+                        session.sendMessage(binaryMessage);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
