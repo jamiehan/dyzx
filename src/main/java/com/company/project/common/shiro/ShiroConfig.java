@@ -106,6 +106,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/layui-ext/**", "anon");
         filterChainDefinitionMap.put("/**", "token,authc");
+        filterChainDefinitionMap.put("/sound/**", "anon");
+        filterChainDefinitionMap.put("*.wav", "anon");
         shiroFilterFactoryBean.setLoginUrl("/index/login");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
