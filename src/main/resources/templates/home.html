@@ -739,16 +739,19 @@
                     ,content: '/index/onekeyalarm'
                     // ,btn: ['继续弹出', '全部关闭'] //只是为了演示
                     ,btn:['关闭窗口']
-                    // ,yes: function(){
-                    //     $(that).click();
-                    // }
-                    ,btn2: function(){
+                    ,yes:function(){
+                        isNeedOnekeyAlarm = true;
+                        // alert(isNeedOnekeyAlarm);
+                        layer.closeAll();
+                    }
+                    /*,btn2: function(){
                         // layer.closeAll();
                         layer.close();
-                        // 接警完关闭后，把接下一次警开关打开
+                    }*/
+                    ,cancel: function(){
                         isNeedOnekeyAlarm = true;
+                        // alert("一键报警按钮闪烁和声音是否开启：" + isNeedOnekeyAlarm);
                     }
-
                     ,zIndex: layer.zIndex //重点1
                     ,success: function(layero){
                         layer.setTop(layero); //重点2
@@ -777,20 +780,24 @@
                     ,content: '/index/facealarm'
                     // ,btn: ['继续弹出', '全部关闭'] //只是为了演示
                     ,btn:['关闭窗口']
-                    // ,yes: function(){
+                    ,yes: function(){
                     //     $(that).click();
+                    //     // 接警完关闭后，把接下一次警开关打开
+                        isNeedFaceAlarm = true;
+                        layer.closeAll();
+                    }
+                    // ,btn2: function(){
+                    //     // layer.closeAll();
+                    //     layer.close();
+                    //     // 接警完关闭后，把接下一次警开关打开
+                    //     isNeedFaceAlarm = true;
                     // }
-                    ,btn2: function(){
-                        // layer.closeAll();
-                        layer.close();
-                        // 接警完关闭后，把接下一次警开关打开
+                    ,cancel: function(){
                         isNeedFaceAlarm = true;
                     }
-
                     ,zIndex: layer.zIndex //重点1
                     ,success: function(layero){
                         layer.setTop(layero); //重点2
-
                     }
                 });
             }
@@ -940,11 +947,13 @@
                 }, 100);*/
                 //控制报警文字闪烁
                 onekeyAlarmInterval = setInterval(changeOnekeyAlarmFontColor,100);
+                playSound("/js/alarm.wav");
                 isNeedOnekeyAlarm = false;
 
             } else if ("faceAlarm" == retData.alarmType && isNeedFaceAlarm) {
                 // $(".face-alarm > button").css("color","#FF0000");
                 faceAlarmInterval = setInterval(changeFaceAlarmFontColor,100);
+                playSound("/js/alarm.wav");
                 isNeedFaceAlarm = false;
             }
 
@@ -956,10 +965,10 @@
             audioElement.setAttribute('autoplay', 'autoplay'); //
             audioElement.play();*/
             // $("#alarmsound").attr("src","/sound/alarm.wav");
-            //正在接警中的时候不报警
+            /*//正在接警中的时候不报警
             if( isNeedOnekeyAlarm && isNeedFaceAlarm ) {
                 playSound("/js/alarm.wav");
-            }
+            }*/
 
             // playSound("/js/1702.mp3");
             // $("#audio").play();
