@@ -161,20 +161,19 @@
                 <source src="/sound/alarm.wav"/>
             </audio>-->
             <audio  autoplay="autoplay" id="auto" src=""></audio>
-           <!-- <input type="button" value="点击播放" onclick="playSound('http://data.huiyi8.com/2017/gha/03/17/1702.mp3')">-->
+            <!--<input type="button" value="点击播放" onclick="playSound('http://data.huiyi8.com/2017/gha/03/17/1702.mp3')">-->
             <li class="layui-nav-item one-key-alarm"><button data-method="setOnekeyAlarmTop" class="layui-btn">一键报警</button></li>
             <li class="layui-nav-item face-alarm"><button data-method="setFaceAlarmTop" class="layui-btn">人脸报警</button></li>
-            <li class="layui-nav-item gathering-alarm"><button data-method="setGatheringAlarmTop" class="layui-btn">人员聚集报警</button></li>
-            <li class="layui-nav-item"><a href="">践踏草坪报警</a></li>
             <li class="layui-nav-item"><a href="">温湿度报警</a></li>
-            <!--<li class="layui-nav-item"><a href="">噪声报警</a></li>-->
+            <li class="layui-nav-item"><a href="">噪声报警</a></li>
             <li class="layui-nav-item"><a href="">安全帽报警</a></li>
             <li class="layui-nav-item"><a href="">异物报警</a></li>
             <li class="layui-nav-item"><a href="">火源报警</a></li>
             <li class="layui-nav-item"><a href="">指示灯报警</a></li>
             <li class="layui-nav-item"><a href="">热成像报警</a></li>
             <li class="layui-nav-item"><a href="">RFID报警</a></li>
-
+            <li class="layui-nav-item"><a href="">人员聚集报警</a></li>
+            <li class="layui-nav-item"><a href="">践踏草坪报警</a></li>
         </ul>
     </div>
 
@@ -523,12 +522,7 @@
         });
     });*/
 
-    let onekeyAlarmInterval;
-    let faceAlarmInterval;
-    let gatheringAlarmInterval;
-    let isNeedOnekeyAlarm = true;
-    let isNeedFaceAlarm = true;
-    let isNeedGatheringAlarm = true;
+
 
     $(function () {
 
@@ -722,7 +716,6 @@
         var active = {
             setOnekeyAlarmTop: function(){
                 $(".one-key-alarm > button").css("color","#FFFFFF");
-                clearInterval(onekeyAlarmInterval);
                 let auto = $("#auto");
                 auto.attr("src","");
                 var that = this;
@@ -742,19 +735,14 @@
                     ,content: '/index/onekeyalarm'
                     // ,btn: ['继续弹出', '全部关闭'] //只是为了演示
                     ,btn:['关闭窗口']
-                    ,yes:function(){
-                        isNeedOnekeyAlarm = true;
-                        // alert(isNeedOnekeyAlarm);
-                        layer.closeAll();
-                    }
-                    /*,btn2: function(){
+                    // ,yes: function(){
+                    //     $(that).click();
+                    // }
+                    ,btn2: function(){
                         // layer.closeAll();
                         layer.close();
-                    }*/
-                    ,cancel: function(){
-                        isNeedOnekeyAlarm = true;
-                        // alert("一键报警按钮闪烁和声音是否开启：" + isNeedOnekeyAlarm);
                     }
+
                     ,zIndex: layer.zIndex //重点1
                     ,success: function(layero){
                         layer.setTop(layero); //重点2
@@ -763,7 +751,6 @@
             }
             ,setFaceAlarmTop: function(){
                 $(".face-alarm > button").css("color","#FFFFFF");
-                clearInterval(faceAlarmInterval);
                 let auto = $("#auto");
                 auto.attr("src","");
                 var that = this;
@@ -783,54 +770,18 @@
                     ,content: '/index/facealarm'
                     // ,btn: ['继续弹出', '全部关闭'] //只是为了演示
                     ,btn:['关闭窗口']
-                    ,yes: function(){
+                    // ,yes: function(){
                     //     $(that).click();
-                    //     // 接警完关闭后，把接下一次警开关打开
-                        isNeedFaceAlarm = true;
-                        layer.closeAll();
-                    }
-                    // ,btn2: function(){
-                    //     // layer.closeAll();
-                    //     layer.close();
-                    //     // 接警完关闭后，把接下一次警开关打开
-                    //     isNeedFaceAlarm = true;
                     // }
-                    ,cancel: function(){
-                        isNeedFaceAlarm = true;
+                    ,btn2: function(){
+                        // layer.closeAll();
+                        layer.close();
                     }
+
                     ,zIndex: layer.zIndex //重点1
                     ,success: function(layero){
                         layer.setTop(layero); //重点2
-                    }
-                });
-            }
-            ,setGatheringAlarmTop: function(){
-                $(".gathering-alarm > button").css("color","#FFFFFF");
-                clearInterval(gatheringAlarmInterval);
-                let auto = $("#auto");
-                auto.attr("src","");
-                var that = this;
-                //多窗口模式，层叠置顶
-                layer.open({
-                    type: 2 //此处以iframe举例
-                    ,title: '人员聚集报警'
-                    ,offset: 'auto'
-                    ,area: ['600px', '500px']
-                    ,shade: 0
-                    ,maxmin: true
-                    ,content: '/index/gatheringalarm'
-                    ,btn:['关闭窗口']
-                    ,yes: function(){
-                        // 接警完关闭后，把接下一次警开关打开
-                        isNeedGatheringAlarm = true;
-                        layer.closeAll();
-                    }
-                    ,cancel: function(){
-                        isNeedGatheringAlarm = true;
-                    }
-                    ,zIndex: layer.zIndex //重点1
-                    ,success: function(layero){
-                        layer.setTop(layero); //重点2
+
                     }
                 });
             }
@@ -891,43 +842,7 @@
 
     function playSound(src) {
         var auto = $("#auto");
-        // auto.attr("muted",false);
         auto.attr("src",src);
-    }
-
-
-    let flag = false;
-    function changeOnekeyAlarmFontColor() {
-
-        if (flag) {
-            flag = false;
-            $(".one-key-alarm > button").css("color","#FFFFFF");
-        } else {
-            flag = true;
-            $(".one-key-alarm > button").css("color","#FF0000");
-        }
-    }
-
-    function changeFaceAlarmFontColor() {
-
-        if (flag) {
-            flag = false;
-            $(".face-alarm > button").css("color","#FFFFFF");
-        } else {
-            flag = true;
-            $(".face-alarm > button").css("color","#FF0000");
-        }
-    }
-
-    function changeGatheringAlarmFontColor() {
-
-        if (flag) {
-            flag = false;
-            $(".gathering-alarm > button").css("color","#FFFFFF");
-        } else {
-            flag = true;
-            $(".gathering-alarm > button").css("color","#FF0000");
-        }
     }
 
     //var socketurl = "ws://192.168.1.58:8080/receivealarm";
@@ -981,29 +896,11 @@
             console.log("evt.data = " + evt.data);
             let retData = JSON.parse(evt.data);
             // alert("retData=" + retData);
-            if ( "onekeyAlarm" == retData.alarmType && isNeedOnekeyAlarm) {
-                //$(".one-key-alarm > button").css("color","#FF0000")
+            if ( "onekeyAlarm" == retData.alarmType ) {
+                $(".one-key-alarm > button").css("color","#FF0000")
 
-                /*setTimeout(() => {
-                    // audioPlay.pause();
-                    // audioPlay.load();
-                    changeFontColor();
-                }, 100);*/
-                //控制报警文字闪烁
-                onekeyAlarmInterval = setInterval(changeOnekeyAlarmFontColor,100);
-                playSound("/js/alarm.wav");
-                isNeedOnekeyAlarm = false;
-
-            } else if ("faceAlarm" == retData.alarmType && isNeedFaceAlarm) {
-                // $(".face-alarm > button").css("color","#FF0000");
-                faceAlarmInterval = setInterval(changeFaceAlarmFontColor,100);
-                playSound("/js/alarm.wav");
-                isNeedFaceAlarm = false;
-            } else if ("gatheringAlarm" == retData.alarmType && isNeedGatheringAlarm) {
-                // $(".face-alarm > button").css("color","#FF0000");
-                gatheringAlarmInterval = setInterval(changeGatheringAlarmFontColor,100);
-                playSound("/js/alarm.wav");
-                isNeedGatheringAlarm = false;
+            } else if ("faceAlarm" == retData.alarmType ) {
+                $(".face-alarm > button").css("color","#FF0000")
             }
 
             // var player = $("#alarmSoundPlayer")[0];
@@ -1014,30 +911,10 @@
             audioElement.setAttribute('autoplay', 'autoplay'); //
             audioElement.play();*/
             // $("#alarmsound").attr("src","/sound/alarm.wav");
-            /*//正在接警中的时候不报警
-            if( isNeedOnekeyAlarm && isNeedFaceAlarm ) {
-                playSound("/js/alarm.wav");
-            }*/
-
+            playSound("/js/alarm.wav");
             // playSound("/js/1702.mp3");
             // $("#audio").play();
             // $("#alarmsound").play();
-
-            /*let audioPlay = document.getElementById('auto');
-
-            audioPlay.play();
-
-            setTimeout(() => {
-                audioPlay.pause();
-                audioPlay.load();
-            }, 1);*/
-
-            /*var music = document.getElementById("auto");//获取ID
-
-            if (music.paused) { //判读是否播放
-                music.paused=false;
-                music.play(); //没有就播放
-            }*/
         }
     }
 

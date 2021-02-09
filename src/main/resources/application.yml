@@ -8,7 +8,7 @@ server:
 
 spring:
   profiles:
-    active: prod
+    active: dev
   mvc:
     throw-exception-if-no-handler-found: true
   resources:
@@ -51,5 +51,9 @@ mybatis-plus:
 #使用代码生成模块时 指定要生成的表存在于哪种数据库，可选值有【mysql、oracle、sqlServer】
 project:
   database: mysql
+
+alarm:
+  gatheringalarm:
+    personNum: 1
 
 

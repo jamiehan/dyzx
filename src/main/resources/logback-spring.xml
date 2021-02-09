@@ -3,7 +3,7 @@
     <!-- 这里面定义了 CONSOLE_LOG_PATTERN, FILE_LOG_PATTERN 等日志格式, 还定义了一些日志级别 -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <property name="LOG_LEVEL" value="INFO"/>
+    <property name="LOG_LEVEL" value="DEBUG"/>
     <property name="LOG_PATH" value="log"/>
     <property name="LOG_FILE" value="project_manager.log"/>
     <property name="LOG_HISTORY" value="project_manager.%d{yyyy-MM-dd}.log"/>

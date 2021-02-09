@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.company.project.entity.BlacklistEntity;
 import com.company.project.service.HttpSessionService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +37,7 @@ import javax.annotation.Resource;
  * @email *****@mail.com
  * @date 2021-01-12 10:42:11
  */
+@Slf4j
 @Controller
 @RequestMapping("/")
 public class RobotController {
@@ -168,7 +170,8 @@ public class RobotController {
             // 视频切换时，先销毁进程，全局变量Process process，方便进程销毁重启，即切换推流视频
             if(process != null){
                 process.destroy();
-                System.out.println(">>>>>>>>>>推流视频切换<<<<<<<<<<");
+                log.debug(">>>>>>>>>>推流视频切换<<<<<<<<<<");
+//                System.out.println(">>>>>>>>>>推流视频切换<<<<<<<<<<");
             }
             String videoSrc = "rtsp://" + rtspUser + ":" + rtspPwd + "@" + ipAddr;
 //            String videoDest = "rtmp://127.0.0.1:1935/live/test";
@@ -177,22 +180,24 @@ public class RobotController {
             String command = ffmpegPath; // ffmpeg位置
             command += "ffmpeg "; // ffmpeg开头，-re代表按照帧率发送，在推流时必须有
             command += " -i \"" + videoSrc + "\""; // 指定要推送的视频
-            command += " -q 0 -f mpegts -codec:v mpeg1video -s 200x150 " + videoDest; // 指定推送服务器，-f：指定格式
+            command += " -q 0 -f mpegts -codec:v mpeg1video -s 400x300 " + videoDest; // 指定推送服务器，-f：指定格式
 
 //            command = ffmpegPath + "ffmpeg -i " + videoSrc + " -vcodec copy -acodec copy -f flv " + videoDest;
-            System.out.println("ffmpeg推流命令：" + command);
-
+//            System.out.println("ffmpeg推流命令：" + command);
+            log.debug("ffmpeg推流命令：" + command);
             // 运行cmd命令，获取其进程
             process = Runtime.getRuntime().exec(command);
             // 输出ffmpeg推流日志
             BufferedReader br= new BufferedReader(new InputStreamReader(process.getErrorStream()));
             String line = "";
             while ((line = br.readLine()) != null) {
-                System.out.println("视频推流信息[" + line + "]");
+                log.debug("视频推流信息[" + line + "]");
+//                System.out.println("视频推流信息[" + line + "]");
             }
             flag = process.waitFor();
         }catch (Exception e){
-            e.printStackTrace();
+//            e.printStackTrace();
+            log.debug("RobotController类中视频推流失败。");
         }
         return flag;
     }

@@ -519,13 +519,14 @@
 <script type="text/javascript" src="/js/SimpChinese.js"></script>
 <script src="/js/roslib.min.js"></script>
 <script src="/js/robot_gui.js"></script>
+<script src="/js/common.js"></script>
 <script>
     init();
     init_ros();
 
     var canvas = document.getElementById('video');
-    var url = 'ws://101.200.59.132:8080/videostream';
-    // var url = 'ws://127.0.0.1:8080/videostream';
+    // var url = 'ws://101.200.59.132:8080/videostream';
+    var url = 'ws://'+ VIDEO_SERVER_IP + ':' + SERVER_PORT + '/videostream';
     // var url = 'rtmp://127.0.0.1:1935/live/test';
     var player = new JSMpeg.Player(url, {canvas: canvas});
 

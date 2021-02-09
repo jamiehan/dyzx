@@ -72,6 +72,11 @@ public class IndexController {
         return "alarm/facealarm" ;
     }
 
+    @GetMapping("/gatheringalarm")
+    public String gatheringAlarm() {
+        return "alarm/gatheringalarm" ;
+    }
+
     @GetMapping("/users/password")
     public String updatePassword() {
         return "users/update_password" ;

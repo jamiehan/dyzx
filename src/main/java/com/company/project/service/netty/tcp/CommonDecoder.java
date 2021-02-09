@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Base64;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * @date: 2021/1/11 16:01
  * @version : V1.0
  */
+@Slf4j
 public class CommonDecoder extends ByteToMessageDecoder {
 
     // CHECKSTYLE:OFF
@@ -72,9 +74,11 @@ public class CommonDecoder extends ByteToMessageDecoder {
 //            ctx.channel().writeAndFlush(byteBuf);
             byte[] allByte = new byte[(oneDataByteBuf.readableBytes())];
             oneDataByteBuf.getBytes(0, allByte);
-            System.out.println("收到的数据（十六进制表示）：" + outMsg);
+            log.debug("收到的数据（十六进制表示）：" + outMsg);
+//            System.out.println("收到的数据（十六进制表示）：" + outMsg);
             String allStr = new String(allByte,"UTF-8");
-            System.out.println("收到的数据（字符串表示）：" + allStr);
+            log.debug("收到的数据（字符串表示）：" + allStr);
+//            System.out.println("收到的数据（字符串表示）：" + allStr);
             out.add(oneDataByteBuf);
         }else if(port == otherPort){
             //TODO 其他端口解码

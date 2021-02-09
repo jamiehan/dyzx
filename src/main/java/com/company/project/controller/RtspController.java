@@ -1,6 +1,7 @@
 package com.company.project.controller;
 
 import com.company.project.common.config.WsHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+@Slf4j
 @Controller
 @RequestMapping("/rtsp")
 public class RtspController {
@@ -23,7 +25,8 @@ public class RtspController {
     @RequestMapping("/receive")
     @ResponseBody
     public String receive(HttpServletRequest request, Object response) {
-        System.out.println("method:" + request.getMethod());
+//        System.out.println("method:" + request.getMethod());
+        log.debug("method:" + request.getMethod());
         try {
             ServletInputStream inputStream = request.getInputStream();
             int len = -1;
@@ -39,9 +42,10 @@ public class RtspController {
                 wsHandler.sendVideo(data);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            log.debug("RtspController类中视频流发送异常");
         }
-        System.out.println("over");
+//        System.out.println("over");
         return "1";
     }
 

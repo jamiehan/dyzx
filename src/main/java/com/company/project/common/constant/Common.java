@@ -282,8 +282,8 @@ public interface Common {
     interface ActionType {
         //人脸识别
         String FACERECOGNITION = "recog_result";
-        //异物
-        String FOREIGNOBJECT = "";
+        //人员聚集
+        String PERSONNELGATHERING = "Object";
 
 
     }
