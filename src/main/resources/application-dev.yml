@@ -64,9 +64,12 @@ robot:
     path: D:\software\ffmpeg\bin\
   rtsp:
     src:
-      addr: 172.16.0.10
+      addr: 192.168.1.10
+      port: 554
       user: admin
       pwd: dyzx2018
+      channel: 1
+      stream: 0
     dest:
       addr: 127.0.0.1
       port: 8080

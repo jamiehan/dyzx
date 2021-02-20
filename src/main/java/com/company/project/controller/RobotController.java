@@ -56,11 +56,20 @@ public class RobotController {
     @Value("${robot.rtsp.src.addr}")
     private String rtspAddr;
 
+    @Value("${robot.rtsp.src.port}")
+    private String rtspPort;
+
     @Value("${robot.rtsp.src.user}")
     private String rtspUser;
 
     @Value("${robot.rtsp.src.pwd}")
     private String rtspPwd;
+
+    @Value("${robot.rtsp.src.channel}")
+    private String rtspChannel;
+
+    @Value("${robot.rtsp.src.stream}")
+    private String rtspStream;
 
     @Value("${robot.rtsp.dest.addr}")
     private String destAddr;
@@ -107,7 +116,7 @@ public class RobotController {
         RobotEntity robotEntity = httpSessionService.getCurrentRobot();
 
         if( robotEntity != null ) {
-            this.pushVideoAsRTSP(robotEntity.getIpaddress());
+            this.pushVideoAsRTSP(robotEntity.getCameraIp());
         }
 
         return DataResult.success(robotEntity);
@@ -173,7 +182,9 @@ public class RobotController {
                 log.debug(">>>>>>>>>>推流视频切换<<<<<<<<<<");
 //                System.out.println(">>>>>>>>>>推流视频切换<<<<<<<<<<");
             }
-            String videoSrc = "rtsp://" + rtspUser + ":" + rtspPwd + "@" + ipAddr;
+//            String videoSrc = "rtsp://" + rtspUser + ":" + rtspPwd + "@" + ipAddr;
+            String videoSrc = "rtsp://" + ipAddr + ":" + rtspPort + "/user=" + rtspUser + "&password="
+                    + rtspPwd + "&channel=" + rtspChannel + "&stream=" + rtspStream + ".sdp?";
 //            String videoDest = "rtmp://127.0.0.1:1935/live/test";
             String videoDest = "http://" + destAddr + ":" + destPort + "/rtsp/receive";
             // cmd命令拼接，注意命令中存在空格

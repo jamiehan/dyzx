@@ -9,6 +9,8 @@
         <result property="xinghao" column="xinghao"/>
         <result property="bianhao" column="bianhao"/>
         <result property="ipaddress" column="ipaddress"/>
+        <result property="cameraIp" column="cameraip"/>
+        <result property="pcIp" column="pcip"/>
         <result property="chuchangriqi" column="chuchangriqi"/>
         <result property="yingjianbanb" column="yingjianbanb"/>
         <result property="ruanjianbanb" column="ruanjianbanb"/>

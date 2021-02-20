@@ -49,6 +49,18 @@ public class RobotEntity extends BaseEntity implements Serializable {
 	private String ipaddress;
 
 	/**
+	 * 云台摄像头IP地址
+	 */
+	@TableField("cameraip")
+	private String cameraIp;
+
+	/**
+	 * 工控机IP地址
+	 */
+	@TableField("pcip")
+	private String pcIp;
+
+	/**
 	 * 出厂日期
 	 */
 	@TableField("chuchangriqi")

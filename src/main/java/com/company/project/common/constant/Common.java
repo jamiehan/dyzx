@@ -283,7 +283,12 @@ public interface Common {
         //人脸识别
         String FACERECOGNITION = "recog_result";
         //人员聚集
-        String PERSONNELGATHERING = "Object";
+        String PERSONNELGATHERING = "Crowding";
+        //践踏草坪
+        String WALKONGRASS = "OnGrass";
+        //异物
+        String FOREIGNMATTER = "Object";
+
 
 
     }

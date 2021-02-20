@@ -35,6 +35,18 @@
             <input type="ipaddress" name="ipaddress" placeholder="请输入机器人IP地址" autocomplete="off" class="layui-input">
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">云台摄像头IP地址</label>
+        <div class="layui-input-block">
+            <input type="cameraIp" name="cameraIp" placeholder="请输入云台摄像头IP地址" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">工控机IP地址</label>
+        <div class="layui-input-block">
+            <input type="pcIp" name="pcIp" placeholder="请输入工控机IP地址" autocomplete="off" class="layui-input">
+        </div>
+    </div>
         <div class="layui-form-item">
       <label class="layui-form-label">出厂日期</label>
       <div class="layui-input-block">
@@ -185,6 +197,8 @@
           {field: 'xinghao', title: '机器人型号', sort: true},
           {field: 'bianhao', title: '机器人编号', sort: true},
           {field: 'ipaddress', title: '机器人IP', sort: true},
+          {field: 'cameraIp', title: '云台摄像机IP', sort: true},
+          {field: 'pcIp', title: '工控机IP', sort: true},
           {field: 'chuchangriqi', title: '出厂日期', sort: true},
           {field: 'yingjianbanb', title: '硬件版本号', sort: true},
           {field: 'ruanjianbanb', title: '软件版本号', sort: true},
@@ -249,6 +263,8 @@
           $(".operation input[name=xinghao]").val("");
           $(".operation input[name=bianhao]").val("");
           $(".operation input[name=ipaddress]").val("");
+          $(".operation input[name=cameraIp]").val("");
+          $(".operation input[name=pcIp]").val("");
           $(".operation input[name=chuchangriqi]").val("");
           $(".operation input[name=yingjianbanb]").val("");
           $(".operation input[name=ruanjianbanb]").val("");
@@ -279,6 +295,8 @@
           $(".operation input[name=xinghao]").val(data.xinghao);
           $(".operation input[name=bianhao]").val(data.bianhao);
           $(".operation input[name=ipaddress]").val(data.ipaddress);
+          $(".operation input[name=cameraIp]").val(data.cameraIp);
+          $(".operation input[name=pcIp]").val(data.pcIp);
           $(".operation input[name=chuchangriqi]").val(data.chuchangriqi);
           $(".operation input[name=yingjianbanb]").val(data.yingjianbanb);
           $(".operation input[name=ruanjianbanb]").val(data.ruanjianbanb);

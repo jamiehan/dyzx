@@ -39,12 +39,12 @@ public class RobotOperationController {
     public DataResult cameraCtrl(@RequestBody PTZControllerVO vo) {
 
         RobotEntity currentRobot = httpSessionService.getCurrentRobot();
-        if( currentRobot == null || StringUtils.isEmpty(currentRobot.getIpaddress()) ) {
+        if( currentRobot == null || StringUtils.isEmpty(currentRobot.getPcIp()) ) {
             return DataResult.fail("当前机器人信息获取失败。");
         }
 
         // 根据机器人IP地址，给摄像头控制的对应指令
-        Channel channel = NettyTcpServer.deviceChannelMap.get(currentRobot.getIpaddress());
+        Channel channel = NettyTcpServer.deviceChannelMap.get(currentRobot.getPcIp());
 
         PTZControllerVO ptzControllerVO = new PTZControllerVO();
         ptzControllerVO.setAction(vo.getAction());

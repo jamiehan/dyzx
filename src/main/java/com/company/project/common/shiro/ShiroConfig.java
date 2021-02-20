@@ -99,6 +99,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/facealarm", "anon");
         filterChainDefinitionMap.put("/receivealarm", "anon");
         filterChainDefinitionMap.put("/gatheringalarm", "anon");
+        filterChainDefinitionMap.put("/walkongrassalarm", "anon");
         //文件上传可直接访问
         filterChainDefinitionMap.put(fileUploadProperties.getAccessUrl(), "anon");
         filterChainDefinitionMap.put("/images/**", "anon");

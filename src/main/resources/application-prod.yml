@@ -68,8 +68,11 @@ robot:
   rtsp:
     src:
       addr: 172.16.0.10
+      port: 554
       user: admin
       pwd: dyzx2018
+      channel: 1
+      stream: 0
     dest:
       addr: 101.200.59.132
       port: 8080

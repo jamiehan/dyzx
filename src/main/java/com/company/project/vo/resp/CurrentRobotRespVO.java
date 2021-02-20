@@ -10,6 +10,10 @@ public class CurrentRobotRespVO {
     private String code;
     @ApiModelProperty(value = "机器人IP")
     private String ipAddress;
+    @ApiModelProperty(value = "云台摄像机IP")
+    private String cameraIp;
+    @ApiModelProperty(value = "工控机IP")
+    private String pcIp;
     @ApiModelProperty(value = "型号")
     private String type;
     @ApiModelProperty(value = "在线状态")

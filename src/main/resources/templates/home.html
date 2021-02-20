@@ -165,7 +165,7 @@
             <li class="layui-nav-item one-key-alarm"><button data-method="setOnekeyAlarmTop" class="layui-btn">一键报警</button></li>
             <li class="layui-nav-item face-alarm"><button data-method="setFaceAlarmTop" class="layui-btn">人脸报警</button></li>
             <li class="layui-nav-item gathering-alarm"><button data-method="setGatheringAlarmTop" class="layui-btn">人员聚集报警</button></li>
-            <li class="layui-nav-item"><a href="">践踏草坪报警</a></li>
+            <li class="layui-nav-item walk-on-grass-alarm"><button data-method="setWalkOnGrassAlarmTop" class="layui-btn">践踏草坪报警</button></li>
             <li class="layui-nav-item"><a href="">温湿度报警</a></li>
             <!--<li class="layui-nav-item"><a href="">噪声报警</a></li>-->
             <li class="layui-nav-item"><a href="">安全帽报警</a></li>
@@ -526,9 +526,11 @@
     let onekeyAlarmInterval;
     let faceAlarmInterval;
     let gatheringAlarmInterval;
+    let walkOnGrassAlarmInterval;
     let isNeedOnekeyAlarm = true;
     let isNeedFaceAlarm = true;
     let isNeedGatheringAlarm = true;
+    let isNeedWalkOnGrassAlarm = true;
 
     $(function () {
 
@@ -834,6 +836,36 @@
                     }
                 });
             }
+            ,setWalkOnGrassAlarmTop: function(){
+                $(".walk-on-grass-alarm > button").css("color","#FFFFFF");
+                clearInterval(walkOnGrassAlarmInterval);
+                let auto = $("#auto");
+                auto.attr("src","");
+                var that = this;
+                //多窗口模式，层叠置顶
+                layer.open({
+                    type: 2 //此处以iframe举例
+                    ,title: '踩踏草坪报警'
+                    ,offset: 'auto'
+                    ,area: ['600px', '500px']
+                    ,shade: 0
+                    ,maxmin: true
+                    ,content: '/index/walkongrassalarm'
+                    ,btn:['关闭窗口']
+                    ,yes: function(){
+                        // 接警完关闭后，把接下一次警开关打开
+                        isNeedWalkOnGrassAlarm = true;
+                        layer.closeAll();
+                    }
+                    ,cancel: function(){
+                        isNeedWalkOnGrassAlarm = true;
+                    }
+                    ,zIndex: layer.zIndex //重点1
+                    ,success: function(layero){
+                        layer.setTop(layero); //重点2
+                    }
+                });
+            }
             ,confirmTrans: function(){
                 //配置一个透明的询问框
                 layer.msg('大部分参数都是可以公用的<br>合理搭配，展示不一样的风格', {
@@ -930,6 +962,17 @@
         }
     }
 
+    function changeWalkOnGrassAlarmFontColor() {
+
+        if (flag) {
+            flag = false;
+            $(".walk-on-grass-alarm > button").css("color","#FFFFFF");
+        } else {
+            flag = true;
+            $(".walk-on-grass-alarm > button").css("color","#FF0000");
+        }
+    }
+
     //var socketurl = "ws://192.168.1.58:8080/receivealarm";
     var socketurl = "ws://" + SERVER_IP + ":" + SERVER_PORT + "/receivealarm";
     var ws = null;
@@ -1004,6 +1047,11 @@
                 gatheringAlarmInterval = setInterval(changeGatheringAlarmFontColor,100);
                 playSound("/js/alarm.wav");
                 isNeedGatheringAlarm = false;
+            } else if ("walkOnGrassAlarm" == retData.alarmType && isNeedWalkOnGrassAlarm) {
+                // $(".face-alarm > button").css("color","#FF0000");
+                walkOnGrassAlarmInterval = setInterval(changeWalkOnGrassAlarmFontColor,100);
+                playSound("/js/alarm.wav");
+                isNeedWalkOnGrassAlarm = false;
             }
 
             // var player = $("#alarmSoundPlayer")[0];

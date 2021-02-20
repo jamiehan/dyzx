@@ -40,6 +40,7 @@ import com.company.project.service.RedisService;
 import com.company.project.vo.resp.FaceRecognitionResultVO;
 import com.company.project.vo.resp.PersonInfoVO;
 import com.company.project.vo.resp.PersonnelGatheringResultVO;
+import com.company.project.vo.resp.WalkOnGrassResultVO;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
@@ -269,6 +270,18 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
                         wsHandler.sendMsg(personnelGatheringMap);
 
                         break;
+                    // 践踏草坪报警
+                    case Common.ActionType.WALKONGRASS:
+
+                        WalkOnGrassResultVO walkOnGrassResultVO = JSONObject.parseObject(jsonObj.toJSONString(), WalkOnGrassResultVO.class);
+
+                        Map<String,Object> walkOnGrassMap = new ConcurrentHashMap<>();
+                        walkOnGrassMap.put("walkOnGrassResultVO", walkOnGrassResultVO);
+
+                        //TODO 推送践踏草坪报警信息到前台
+                        wsHandler.sendMsg(walkOnGrassMap);
+
+                        break;
                     default:
                         break;
 
@@ -278,10 +291,10 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
 
                 break;
             case 6282:
-
+                //TODO 监听6282端口处理内容
                 break;
             case 6283:
-
+                //TODO 监听6283端口处理内容
                 break;
             default:
         }

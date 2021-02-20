@@ -14,8 +14,8 @@ public class PTZControllerVO {
     /* 机器人编码 */
     private String robotCode;
 
-    /* 机器人IP地址 */
-    private String robotIpAddress;
+    /* 云台摄像头IP地址 */
+    private String cameraIp;
 
     /* 固定值 ‘PTZ’ */
     private String action;
@@ -44,12 +44,12 @@ public class PTZControllerVO {
         this.robotCode = robotCode;
     }
 
-    public String getRobotIpAddress() {
-        return robotIpAddress;
+    public String getCameraIp() {
+        return cameraIp;
     }
 
-    public void setRobotIpAddress(String robotIpAddress) {
-        this.robotIpAddress = robotIpAddress;
+    public void setCameraIp(String cameraIp) {
+        this.cameraIp = cameraIp;
     }
 
     public String getAction() {

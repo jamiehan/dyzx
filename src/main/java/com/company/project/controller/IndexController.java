@@ -77,6 +77,11 @@ public class IndexController {
         return "alarm/gatheringalarm" ;
     }
 
+    @GetMapping("/walkongrassalarm")
+    public String walkOnGrassAlarm() {
+        return "alarm/walkongrassalarm" ;
+    }
+
     @GetMapping("/users/password")
     public String updatePassword() {
         return "users/update_password" ;
