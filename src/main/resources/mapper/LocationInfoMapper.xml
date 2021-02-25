@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.company.project.mapper.LocationInfoMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.company.project.entity.LocationInfoEntity" id="locationInfoMap">
+        <result property="id" column="id"/>
+        <result property="robotCode" column="robot_code"/>
+        <result property="posName" column="pos_name"/>
+        <result property="posX" column="pos_x"/>
+        <result property="posY" column="pos_y"/>
+        <result property="posZ" column="pos_z"/>
+        <result property="oriX" column="ori_x"/>
+        <result property="oriY" column="ori_y"/>
+        <result property="oriZ" column="ori_z"/>
+        <result property="oriW" column="ori_w"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updater" column="updater"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+</mapper>

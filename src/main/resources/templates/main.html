@@ -275,22 +275,24 @@
                 </div>
                 <div class="layui-row cruise-control-area">
                     <fieldset class="layui-elem-field">
-                        <legend>设置巡航方案</legend>
+                        <legend>巡航控制</legend>
                         <div class="layui-field-box robot-control-box">
-                            <div class="layui-col-md8 cruise-control-area-left">
-                                <div class="layui-row cruise-ctrl-up">
-                                    <select name="" lay-verify="required">
+                            <div class="layui-row cruise-control-area-left">
+                                <div class="layui-row cruise-ctrl-up" id="locationList">
+                                    <!--<select name="locationList" id="locationList" lay-verify="required">
                                         <option value=""></option>
-                                    </select>
+                                    </select>-->
                                 </div>
                                 <div class="layui-row cruise-ctrl-down">
                                     <input type="text" name="title" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
-                            <div class="layui-col-md4 cruise-control-area-right">
-                                <div class="layui-rows cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">获取位置</button></div>
-                                <div class="layui-rows cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">单点巡航</button></div>
-                                <div class="layui-rows cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">多点巡航</button></div>
+                            <div class="layui-row cruise-control-area-right">
+                                <!--<div class="layui-rows cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">获取位置</button></div>-->
+                                <div class="layui-col-md4 cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">单点巡航</button></div>
+                                <div class="layui-col-md4 cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">多点巡航</button></div>
+                                <div class="layui-col-md4 cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="cancel()">停止巡航</button></div>
+
                             </div>
                         </div>
                     </fieldset>
@@ -309,12 +311,14 @@
                         <div class="layui-col-md1"><span id="type"></span></div>
                         <div class="layui-col-md1">在线状态：</div>
                         <div class="layui-col-md1"><span id="state"></span></div>
-                        <div class="layui-col-md1">工作地点：</div>
-                        <div class="layui-col-md5"><span id="location"></span></div>
+                        <div class="layui-col-md1">电池电量：</div>
+                        <div class="layui-col-md5"><span id="batteryValue"></span></div>
                     </div>
                     <div class="layui-row">
+                        <div class="layui-col-md1">工作地点：</div>
+                        <div class="layui-col-md1"><span id="location"></span></div>
                         <div class="layui-col-md1">所属单位：</div>
-                        <div class="layui-col-md3"><span id="company"></span></div>
+                        <div class="layui-col-md1"><span id="company"></span></div>
                         <div class="layui-col-md1">联系人：</div>
                         <div class="layui-col-md1"><span id="contact"></span></div>
                         <div class="layui-col-md1">电话：</div>
@@ -520,6 +524,7 @@
 <script src="/js/roslib.min.js"></script>
 <script src="/js/robot_gui.js"></script>
 <script src="/js/common.js"></script>
+<script src="/js/xm-select.js"></script>
 <script>
     init();
     init_ros();
@@ -570,6 +575,95 @@
     CoreUtil.sendGet("/robot/getCurrentRobotVideo/", param, function (res) {
 
     });
+
+    CoreUtil.sendGet("/robot/getLocationInfoList/", param, function (res) {
+
+        var obj = [];
+        res.data.forEach(function(v, i) {
+            obj.push({
+                name : v.posName,
+                value :v.id
+            });
+        })
+
+        var locationList = xmSelect.render({
+            el: '#locationList',
+            tips:'请选择要巡航的目的地',
+            style:{
+                size:'',
+                height: '8px'
+            },
+            language: 'zn',
+            data: obj
+
+        })
+
+        // $.each(res.data, function (index, item) {
+        //     $('#locationList').append(new Option(item.posName, item.id));// 下拉菜单里添加元素
+        // });
+
+    });
+
+    var locationList = xmSelect.render({
+        el: '#locationList',
+        tips:'请选择要巡航的目的地',
+        style:{
+            size:'',
+            height: '8px'
+        },
+        language: 'zn',
+        data: []
+
+    })
+
+    function cruise(px,py,pz,ox,oy,oz,ow){
+        var topic = new ROSLIB.Topic({
+            ros : ros,
+            name: '/move_base_simple/goal',
+            messageType: 'geometry_msgs/PoseStamped'
+        });
+        var message = new ROSLIB.Message({
+            header: {frame_id: 'map'},
+            pose: {position: { x: px, y: py, z: pz, },
+                orientation: { x: ox, y: oy, z: oz, w: ow}}
+        });
+        //topic();
+        topic.publish(message);
+        // console.log('StartingPoint publisher: ' + message);
+    }
+
+/*
+    document.getElementById('demo2-getValue').onclick = function(){
+        //获取当前多选选中的值
+        var selectArr = demo2.getValue();
+        document.getElementById('demo2-value').innerHTML = `\nlocationList.getValue()\n\n` + JSON.stringify(selectArr, null, 2);
+    }
+*/
+
+/*    var types = ['name', 'nameStr', 'value', 'valueStr'];
+    types.forEach(function(type){
+        document.getElementById(type).onclick = function(){
+            //获取当前多选选中的值
+            var selectArr = demo2.getValue(type);
+            document.getElementById('demo2-value').innerHTML = `\nlocationList.getValue('${type}')\n\n` + JSON.stringify(selectArr, null, 2);
+        }
+    });*/
+
+/*    var locationList = xmSelect.render({
+        el: '#locationList',
+        language: 'zn',
+        data: [
+            {name: '张三', value: 1},
+            {name: '李四', value: 2},
+            {name: '王五', value: 3},
+        ]
+    })*/
+
+/*    document.getElementById('locationList-getValue').onclick = function(){
+        //获取当前多选选中的值
+        var selectArr = locationList.getValue();
+        document.getElementById('locationList-value').innerHTML = JSON.stringify(selectArr, null, 2);
+    }*/
     
 </script>
 <!--<script>

@@ -3,7 +3,8 @@ var rosbridgePort = "9090";
 var mjpegPort = "8080";
 
 // Get the current hostname
-thisHostName = document.location.hostname;
+thisHostName = "192.168.1.102";//document.location.hostname;
+// thisHostName = "172.16.0.19";
 
 // If the rosbridge server is running on the webserver host, then this will
 // work.
@@ -48,6 +49,8 @@ var options = {
     vzKeyIncrement: 0.05,
     deadZoneVz: 0.2,
 
+    //Starting Point and Charging Point of Robot
+    moveBaseGoalTopic: '/move_base_simple/goal',
 
     // Use this topic for the fake battery
     robotBatteryTopic: '/voltage',
@@ -60,6 +63,8 @@ var options = {
     videoQuality: 50,
     fovWidthRadians: 0.99, // Asus 57 degrees
     fovHeightRadians: 0.78 // Asus 45 degrees
+
+
 };
 
 // The global linear and angular speed variables
@@ -119,21 +124,21 @@ ros.on('connection', function() {
     console.log('Rosbridge connected.');
 
     // Create the video viewer.
-    videoViewer = new MJPEGCANVAS.Viewer({
-	divID : 'videoCanvas',
-	host : mjpegHost,
-	port: mjpegPort,
-	width : videoStageWidth,
-	height : videoStageHeight,
-	quality: options['videoQuality'],
-	topic : options['videoTopic']
-    });
+    // videoViewer = new MJPEGCANVAS.Viewer({
+	// divID : 'videoCanvas',
+	// host : mjpegHost,
+	// port: mjpegPort,
+	// width : videoStageWidth,
+	// height : videoStageHeight,
+	// quality: options['videoQuality'],
+	// topic : options['videoTopic']
+    // });
 
     // Create the main Navigation viewer.
     var navViewer = new ROS2D.Viewer({
 	divID : 'navCanvas',
-	width : 700,
-	height : 500
+	width : 615,//700,
+	height : 620 //500
     });
     var zoomView = new ROS2D.ZoomView({
 	    rootObject: navViewer.scene
@@ -241,8 +246,8 @@ function cancel() {
 	    
 	    // Update the value on the GUI
 	    var element = document.getElementById('maxLinearSpeed');
-	    element.setAttribute("max", maxLinearSpeed);
-	    element.setAttribute("value", options['defaultLinearSpeed']);
+	    // element.setAttribute("max", maxLinearSpeed);
+	    // element.setAttribute("value", options['defaultLinearSpeed']);
 	}
     });
 
@@ -259,8 +264,8 @@ function cancel() {
 	    
 	    // Update the value on the GUI
 	    var element = document.getElementById('maxAngularSpeed');
-	    element.setAttribute("max", maxAngularSpeed);
-	    element.setAttribute("value", options['defaultAngularSpeed']);
+	    // element.setAttribute("max", maxAngularSpeed);
+	    // element.setAttribute("value", options['defaultAngularSpeed']);
 	}
     });
 
@@ -321,7 +326,7 @@ function connectServer() {
 function startSubscribers() {
     // Subscribe to the robot battery topic
 
-    // Use for battery level published on /battery_level
+    // Use for fake battery level published on /battery_level
     var subRobotBattery = new ROSLIB.Topic({
 	ros : ros,
 	name : options['robotBatteryTopic'],
@@ -330,11 +335,11 @@ function startSubscribers() {
     });
 	 
     subRobotBattery.subscribe(function(msg){
-        $("#batteryValue").val(msg.data);
+
 	var color =	getBatteryColor(msg.data);
-	$("#robotBatteryGauge").jqxLinearGauge({
-	    value: msg.data,
-	    pointer: {size: '20%', style: {fill: color}}});
+	// $("#robotBatteryGauge").jqxLinearGauge({
+	//     value: msg.data,
+	//     pointer: {size: '20%', style: {fill: color}}});
     });
 
     console.log('Subscribed to ' + options['robotBatteryTopic']);
@@ -353,6 +358,33 @@ var cmdVelPub = new ROSLIB.Topic({
     name : options['cmdVelTopic'],
     messageType : 'geometry_msgs/Twist'
 });
+
+let moveBaseGoalPub = new ROSLIB.Topic({
+    ros : ros,
+    name : options['moveBaseGoalTopic'],
+    messageType: 'geometry_msgs/PoseStamped'
+});
+
+function pubMoveBaseGoal(px, py, pz, ox, oy, oz, ow) {
+    let moveBaseGoalMsg = new ROSLIB.Message({
+        header: {frame_id: 'map'},
+        pose : {
+            position : {
+                x : px,
+                y : py,
+                z : pz
+            },
+            orientation : {
+                x : ox,
+                y : oy,
+                z : oz,
+                w : ow
+            }
+        }
+    });
+
+    moveBaseGoalPub.publish(moveBaseGoalMsg);
+}
 
 function pubCmdVel() {
     vx = Math.min(Math.abs(vx), options['maxLinearSpeed']) * sign(vx);
@@ -373,9 +405,9 @@ function pubCmdVel() {
 
     cmdVelPub.publish(cmdVelMsg);
 
-    updateCmdVelMarker();
+    //updateCmdVelMarker();
 
-    writeMessageById("baseMessages", " vx: " + Math.round(vx * 100)/100 + ", vz: " + Math.round(vz*100)/100);
+    //writeMessageById("baseMessages", " vx: " + Math.round(vx * 100)/100 + ", vz: " + Math.round(vz*100)/100);
 }
 
 // Base speed control using the keyboard or mouse
@@ -588,8 +620,8 @@ function subChatter() {
 }
 
 function refreshPublishers() {
-    var pubChatterOn = $("#pubChatterButton").jqxToggleButton('toggled');
-    if (pubChatterOn) pubChatter();
+    // var pubChatterOn = $("#pubChatterButton").jqxToggleButton('toggled');
+    // if (pubChatterOn) pubChatter();
 
     //pubCmdVel();
 }
@@ -615,3 +647,5 @@ function sign(x)
 function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
+
+
