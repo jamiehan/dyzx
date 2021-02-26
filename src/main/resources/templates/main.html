@@ -283,15 +283,15 @@
                                         <option value=""></option>
                                     </select>-->
                                 </div>
-                                <div class="layui-row cruise-ctrl-down">
+                                <!--<div class="layui-row cruise-ctrl-down">
                                     <input type="text" name="title" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
-                                </div>
+                                </div>-->
                             </div>
                             <div class="layui-row cruise-control-area-right">
                                 <!--<div class="layui-rows cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">获取位置</button></div>-->
-                                <div class="layui-col-md4 cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">单点巡航</button></div>
-                                <div class="layui-col-md4 cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">多点巡航</button></div>
-                                <div class="layui-col-md4 cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="cancel()">停止巡航</button></div>
+                                <div class="layui-col-md4 cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="singlePointCruise()">单点巡航</button></div>
+                                <div class="layui-col-md4 cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="multiPointCruise()">多点巡航</button></div>
+                                <div class="layui-col-md4 cruise-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="cancelCruise()">取消巡航</button></div>
 
                             </div>
                         </div>
@@ -313,6 +313,7 @@
                         <div class="layui-col-md1"><span id="state"></span></div>
                         <div class="layui-col-md1">电池电量：</div>
                         <div class="layui-col-md5"><span id="batteryValue"></span></div>
+                        <!--<div class="layui-col-md1 display:none"><span id="ipaddress"></span></div>-->
                     </div>
                     <div class="layui-row">
                         <div class="layui-col-md1">工作地点：</div>
@@ -526,6 +527,7 @@
 <script src="/js/common.js"></script>
 <script src="/js/xm-select.js"></script>
 <script>
+
     init();
     init_ros();
 
@@ -567,6 +569,12 @@
             $("#company").html(res.data.suosudw);
             $("#contact").html(res.data.contact);
             $("#telephone").html(res.data.telephone);
+            $("#ipaddress").html(res.data.ipaddress);
+            /*alert("batteryValue=" + batteryValue);
+            $("#batteryValue").html(getBatteryValue());*/
+            // thisHostName = res.data.ipaddress;
+            // document.write("<script src='/js/robot_gui.js'>"+"<\/script>");
+
         }
 
     });
@@ -579,10 +587,18 @@
     CoreUtil.sendGet("/robot/getLocationInfoList/", param, function (res) {
 
         var obj = [];
-        res.data.forEach(function(v, i) {
+/*        res.data.forEach(function(v, i) {
             obj.push({
                 name : v.posName,
-                value :v.id
+                value :v
+            });
+        })*/
+
+        var objArr = res.data;
+        $.each(objArr, function(index,callback){
+            obj.push({
+                name : objArr[index].posName,
+                value :objArr[index]
             });
         })
 
@@ -632,13 +648,54 @@
         // console.log('StartingPoint publisher: ' + message);
     }
 
-/*
-    document.getElementById('demo2-getValue').onclick = function(){
+    // 单点巡航
+    var singlePointCruise = function() {
+        //获取当前多选选中的值
+        var selectArr = locationList.getValue("value");
+        if(selectArr.length < 1) {
+            layer.alert("请选择要巡航的目的地位置");
+        } else if (selectArr.length > 1) {
+            layer.alert("单点巡航只能选择一个目的地位置");
+        }
+        // alert(selectArr.length);
+        //alert(JSON.stringify(selectArr, null, 2));
+        $.each(selectArr,function(index,callback){
+            // alert(selectArr[index].posName);
+            console.log("posX=" + selectArr[index].posX + ",posY=" + selectArr[index].posY + ",posZ=" + selectArr[index].posZ);
+            console.log("oriX=" + selectArr[index].oriX + ",oriY=" + selectArr[index].oriY + ",oriZ=" + selectArr[index].oriZ + ",oriW=" + selectArr[index].oriW);
+            cruise(selectArr[index].posX, selectArr[index].posY, selectArr[index].posZ,
+                selectArr[index].oriX, selectArr[index].oriY, selectArr[index].oriZ, selectArr[index].oriW);
+        })
+
+        // cruise();
+
+    }
+
+    // 多点巡航
+    var multiPointCruise = function() {
+        //TODO 多点巡航
+    }
+
+    //取消巡航
+    function cancelCruise(){
+        var topic = new ROSLIB.Topic({
+            ros : ros,
+            name: '/move_base/cancel',
+            messageType: 'actionlib_msgs/GoalID'
+        });
+        var message = new ROSLIB.Message({
+            id: ''
+        });
+        //topic();
+        topic.publish(message);
+        // console.log('CancelA publisher: ' + message);
+    }
+
+/*    document.getElementById('demo2-getValue').onclick = function(){
         //获取当前多选选中的值
         var selectArr = demo2.getValue();
         document.getElementById('demo2-value').innerHTML = `\nlocationList.getValue()\n\n` + JSON.stringify(selectArr, null, 2);
-    }
-*/
+    }*/
 
 /*    var types = ['name', 'nameStr', 'value', 'valueStr'];
     types.forEach(function(type){

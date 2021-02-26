@@ -3,7 +3,9 @@ var rosbridgePort = "9090";
 var mjpegPort = "8080";
 
 // Get the current hostname
-thisHostName = document.location.hostname;
+//thisHostName = document.location.hostname;
+//thisHostName = $("#ipaddress").html();
+thisHostName = "192.168.1.102"
 
 // If the rosbridge server is running on the webserver host, then this will
 // work.
@@ -94,6 +96,8 @@ var topicList = [];
 var paramList = [];
 var lastParamValue;
 
+// var batteryValue;
+
 function init_ros() {
     ros.connect(serverURL);
 
@@ -118,7 +122,7 @@ ros.on('error', function(event) {
 ros.on('connection', function() {
     console.log('Rosbridge connected.');
 
-    // Create the video viewer.
+/*    // Create the video viewer.
     videoViewer = new MJPEGCANVAS.Viewer({
 	divID : 'videoCanvas',
 	host : mjpegHost,
@@ -127,13 +131,13 @@ ros.on('connection', function() {
 	height : videoStageHeight,
 	quality: options['videoQuality'],
 	topic : options['videoTopic']
-    });
+    });*/
 
     // Create the main Navigation viewer.
     var navViewer = new ROS2D.Viewer({
 	divID : 'navCanvas',
-	width : 700,
-	height : 500
+	width : 600,//700,
+	height : 620//500
     });
     var zoomView = new ROS2D.ZoomView({
 	    rootObject: navViewer.scene
@@ -241,8 +245,8 @@ function cancel() {
 	    
 	    // Update the value on the GUI
 	    var element = document.getElementById('maxLinearSpeed');
-	    element.setAttribute("max", maxLinearSpeed);
-	    element.setAttribute("value", options['defaultLinearSpeed']);
+	    /*element.setAttribute("max", maxLinearSpeed);
+	    element.setAttribute("value", options['defaultLinearSpeed']);*/
 	}
     });
 
@@ -259,8 +263,8 @@ function cancel() {
 	    
 	    // Update the value on the GUI
 	    var element = document.getElementById('maxAngularSpeed');
-	    element.setAttribute("max", maxAngularSpeed);
-	    element.setAttribute("value", options['defaultAngularSpeed']);
+	    /*element.setAttribute("max", maxAngularSpeed);
+	    element.setAttribute("value", options['defaultAngularSpeed']);*/
 	}
     });
 
@@ -330,11 +334,12 @@ function startSubscribers() {
     });
 	 
     subRobotBattery.subscribe(function(msg){
-        $("#batteryValue").val(msg.data);
-	var color =	getBatteryColor(msg.data);
+        // batteryValue = msg.data;
+        $("#batteryValue").html(msg.data);
+	/*var color =	getBatteryColor(msg.data);
 	$("#robotBatteryGauge").jqxLinearGauge({
 	    value: msg.data,
-	    pointer: {size: '20%', style: {fill: color}}});
+	    pointer: {size: '20%', style: {fill: color}}});*/
     });
 
     console.log('Subscribed to ' + options['robotBatteryTopic']);
@@ -588,8 +593,8 @@ function subChatter() {
 }
 
 function refreshPublishers() {
-    var pubChatterOn = $("#pubChatterButton").jqxToggleButton('toggled');
-    if (pubChatterOn) pubChatter();
+    /*var pubChatterOn = $("#pubChatterButton").jqxToggleButton('toggled');
+    if (pubChatterOn) pubChatter();*/
 
     //pubCmdVel();
 }
@@ -615,3 +620,7 @@ function sign(x)
 function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
+
+/*function getBatteryValue(){
+    return batteryValue;
+}*/
