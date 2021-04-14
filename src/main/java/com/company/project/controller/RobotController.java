@@ -183,6 +183,7 @@ public class RobotController {
 //                System.out.println(">>>>>>>>>>推流视频切换<<<<<<<<<<");
             }
 //            String videoSrc = "rtsp://" + rtspUser + ":" + rtspPwd + "@" + ipAddr;
+            //rtsp://192.168.1.10:554/user=admin&password=dyzx2018&channel=1&stream=0.sdp?
             String videoSrc = "rtsp://" + ipAddr + ":" + rtspPort + "/user=" + rtspUser + "&password="
                     + rtspPwd + "&channel=" + rtspChannel + "&stream=" + rtspStream + ".sdp?";
 //            String videoDest = "rtmp://127.0.0.1:1935/live/test";
