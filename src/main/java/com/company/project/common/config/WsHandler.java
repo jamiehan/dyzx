@@ -75,9 +75,35 @@ public class WsHandler extends BinaryWebSocketHandler {
         for (Map.Entry<String, WebSocketSession> sessionEntry : clients.entrySet()) {
             try {
                 WebSocketSession session = sessionEntry.getValue();
-                if (session.isOpen() && session.getUri().getPath().endsWith("/videostream")) {
+                if (session.isOpen() && session.getUri().getPath().endsWith("/video")) {
                     synchronized (session) {
                         session.sendMessage(binaryMessage);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("发送视频异常");
+                //e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 发送人脸报警数据
+     * @param data
+     * @param <T>
+     */
+    public <T> void sendFaceAlarmMsg(Map<String,T> data) {
+//        BinaryMessage binaryMessage = new BinaryMessage(null);
+//        WebSocketMessage newMessage = new SocketMessage(data);
+        TextMessage textMessage = new TextMessage(JSON.toJSONString(data));
+
+        for (Map.Entry<String, WebSocketSession> sessionEntry : clients.entrySet()) {
+            try {
+                WebSocketSession session = sessionEntry.getValue();
+                if (session.isOpen()) {
+//                    session.sendMessage(binaryMessage);
+                    synchronized (session) {
+                        session.sendMessage(textMessage);
                     }
                 }
             } catch (Exception e) {
@@ -96,10 +122,12 @@ public class WsHandler extends BinaryWebSocketHandler {
                 WebSocketSession session = sessionEntry.getValue();
                 if (session.isOpen()) {
 //                    session.sendMessage(binaryMessage);
-                    session.sendMessage(textMessage);
-
+                    synchronized (session) {
+                        session.sendMessage(textMessage);
+                    }
                 }
             } catch (Exception e) {
+                System.out.println("发送消息异常");
                 e.printStackTrace();
             }
         }

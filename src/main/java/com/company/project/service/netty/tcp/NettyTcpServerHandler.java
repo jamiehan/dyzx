@@ -37,10 +37,7 @@ import com.company.project.entity.RobotEntity;
 import com.company.project.service.BlacklistService;
 import com.company.project.service.HttpSessionService;
 import com.company.project.service.RedisService;
-import com.company.project.vo.resp.FaceRecognitionResultVO;
-import com.company.project.vo.resp.PersonInfoVO;
-import com.company.project.vo.resp.PersonnelGatheringResultVO;
-import com.company.project.vo.resp.WalkOnGrassResultVO;
+import com.company.project.vo.resp.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
@@ -50,6 +47,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
+import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.concurrent.GlobalEventExecutor;
@@ -132,18 +130,25 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext context) {
 
         NettyTcpServer.deviceChannelMap.put(this.getIPString(context), context.channel());
-        log.debug("Virtual Listening Driver Listener({}) accept clint({})", context.channel().localAddress(), context.channel().remoteAddress());
+        log.debug("Virtual Listening Driver Listener({}) accept client({})", context.channel().localAddress(), context.channel().remoteAddress());
     }
 
     @Override
-    @SneakyThrows
+//    @SneakyThrows
     public void channelRead(ChannelHandlerContext context, Object msg) {
         ByteBuf byteBuf = (ByteBuf) msg;
 
         byte[] allByteArr = new byte[byteBuf.readableBytes()];
         byteBuf.getBytes(0, allByteArr);
-        String allStr = new String(allByteArr,"UTF-8");
-        log.debug("收到的数据（字符串表示）：" + allStr);
+        String allStr = null;
+        try {
+            allStr = new String(allByteArr, "UTF-8");
+            log.debug("收到的数据（字符串表示）：" + allStr);
+        } catch (Exception e){
+            log.debug("收到的数据（字符串表示）处理异常");
+            return;
+        }
+
 //        System.out.println("收到的数据（字符串表示）：" + allStr);
         //TODO数据校验
 /*        //判断数据帧头是否为0x5B,0x5B
@@ -191,7 +196,14 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
         SocketAddress socketAddress = context.channel().localAddress();
         String s = socketAddress.toString();
         String[] addrAndPort = s.split(":");
-        String dataStr = new String(dataByteArray,"UTF-8");
+        String dataStr = null;
+        try {
+            dataStr = new String(dataByteArray,"UTF-8");
+            log.debug("读取内容字节缓存到字节数组中数据：" + dataStr);
+        } catch (Exception e){
+            log.debug("读取内容字节缓存到字节数组中数据处理异常");
+            return;
+        }
 
         switch (Integer.parseInt(addrAndPort[1])) {
             case 6281:
@@ -227,16 +239,17 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
                                 String alarmInfoKey = "faceAlarm:" + strRemoteAddr + ":" + strDate;
                                 //TODO 保存人脸数据
                                 redisService.set(alarmInfoKey, JSONObject.toJSONString(faceMap));
-                                Map<String,String> alarmInfoMap = new ConcurrentHashMap<>();
-                                alarmInfoMap.put("alarmType","faceAlarm");
-                                alarmInfoMap.put("robotIpAddr",strRemoteAddr);
-                                alarmInfoMap.put("alarmInfoKey", alarmInfoKey);
+//                                Map<String,String> alarmInfoMap = new ConcurrentHashMap<>();
+//                                alarmInfoMap.put("alarmType","faceAlarm");
+//                                alarmInfoMap.put("robotIpAddr",strRemoteAddr);
+//                                alarmInfoMap.put("alarmInfoKey", alarmInfoKey);
+                                faceMap.put("alarmType","faceAlarm");
+
+//                                //TODO 推送人脸报警信息到前台
+//                                wsHandler.sendFaceAlarmMsg(alarmInfoMap);
 
                                 //TODO 推送人脸报警信息到前台
-                                wsHandler.sendMsg(alarmInfoMap);
-
-                                //TODO 推送人脸报警信息到前台
-                                wsHandler.sendMsg(faceMap);
+                                wsHandler.sendFaceAlarmMsg(faceMap);
                             }
                         }
 
@@ -282,6 +295,40 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
                         wsHandler.sendMsg(walkOnGrassMap);
 
                         break;
+                    // 异物报警
+                    case Common.ActionType.FOREIGNMATTER:
+
+                        ForeignMatterResultVO foreignMatterResultVO = JSONObject.parseObject(jsonObj.toJSONString(), ForeignMatterResultVO.class);
+
+                        Map<String,Object> foreignMatterMap = new ConcurrentHashMap<>();
+                        foreignMatterMap.put("foreignMatterResultVO", foreignMatterResultVO);
+
+                        //TODO 推送异物报警信息到前台
+                        wsHandler.sendMsg(foreignMatterMap);
+
+                        break;
+                    // 目标物体检测报警
+                    case Common.ActionType.OBJECT_DETECTION:
+
+                        ObjectDetectionResultVO objectDetectionResultVO = JSONObject.parseObject(jsonObj.toJSONString(), ObjectDetectionResultVO.class);
+
+                        Map<String,Object> objectDetectionMap = new ConcurrentHashMap<>();
+                        objectDetectionMap.put("objectDetectionResultVO", objectDetectionResultVO);
+
+                        //TODO 推送目标物体检测报警信息到前台
+                        wsHandler.sendMsg(objectDetectionMap);
+
+                        break;
+                     //温湿度实时显示
+                    case Common.ActionType.TEMPHUM:
+                        TempHumResultVO tempHumResultVO = JSONObject.parseObject(jsonObj.toJSONString(), TempHumResultVO.class);
+
+                        Map<String,Object> tempHumMap = new ConcurrentHashMap<>();
+                        tempHumMap.put("tempHumResultVO", tempHumResultVO);
+
+                        //TODO 推送温湿度信息到前台
+                        wsHandler.sendMsg(tempHumMap);
+                        break;
                     default:
                         break;
 
@@ -292,9 +339,12 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
                 break;
             case 6282:
                 //TODO 监听6282端口处理内容
+
+
                 break;
             case 6283:
                 //TODO 监听6283端口处理内容
+
                 break;
             default:
         }
@@ -359,6 +409,7 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
     @SneakyThrows
     public void exceptionCaught(ChannelHandlerContext context, Throwable throwable) {
         log.debug(throwable.getMessage());
+        //context.channel().pipeline().remove();
         context.close();
     }
 
@@ -374,13 +425,13 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
          */
         channelGroup.writeAndFlush(" 【服务器】 -" +channel.remoteAddress() +" 加入\n");
         channelGroup.add(channel);
+        NettyTcpServer.deviceChannelMap.put(this.getIPString(ctx), ctx.channel());
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         Channel channel = ctx.channel();
-        channelGroup.writeAndFlush(" 【服务器】 -" +channel.remoteAddress() +" 离开\n");
-
+        //channelGroup.writeAndFlush(" 【服务器】 -" +channel.remoteAddress() +" 离开\n");
         //验证一下每次客户端断开连接，连接自动地从channelGroup中删除调。
         log.debug("channelGroup.size=" + channelGroup.size());
 //        System.out.println(channelGroup.size());
@@ -427,10 +478,10 @@ public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
             IdleStateEvent event = (IdleStateEvent) evt;
 
             if (event.state().equals(IdleState.READER_IDLE)) {
-                log.debug("------长期未收到服务器反馈数据------");
+                //log.debug("------长期未收到服务器反馈数据------");
 //                String loginMsg = "test server";//Login.login("admin", "admin");
                 ByteBuf sendData = ByteUtils.editSendData(Common.CommandType.DATA,null);
-                log.debug("------发送数据------" + sendData+"\r\n");
+                //log.debug("------发送数据------" + sendData+"\r\n");
                 ctx.writeAndFlush(sendData);
                 //System.out.println("关闭这个不活跃通道！");
                 //关闭这个不活跃通道

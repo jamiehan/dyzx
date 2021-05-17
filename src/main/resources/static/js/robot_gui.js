@@ -40,14 +40,14 @@ var ros;
 var options = {
     // Speed parameters
     cmdVelTopic: '/cmd_vel',
-    defaultLinearSpeed: 0.18,
+    defaultLinearSpeed: 0.5,
     defaultAngularSpeed: 1.0,
-    maxLinearSpeed: 0.3,
+    maxLinearSpeed: 0.5,
     maxAngularSpeed: 1.2,
     minLinearSpeed: 0.05,
     minAngularSpeed: 0.1,
-    vxKeyIncrement: 0.02,
-    vzKeyIncrement: 0.05,
+    vxKeyIncrement: 0.1,
+    vzKeyIncrement: 0.1,
     deadZoneVz: 0.2,
 
 
@@ -396,19 +396,35 @@ function setSpeed(code) {
     }
     else if (code == "left" || code == 37 || code == 65) {
         // Left arrow or "a"
-	vz += options['vzKeyIncrement'];
+        if($('#walkingSpeed').val() != null) {
+            vz += $('#walkingSpeed').val();
+        } else {
+            vz += options['vzKeyIncrement'];
+        }
     }
     else if (code == 'forward' || code == 38 || code == 87) {
         // Up arrow or "w"
-        vx += options['vxKeyIncrement'];
+        if($('#walkingSpeed').val() != null) {
+            vx += $('#walkingSpeed').val();
+        } else {
+            vx += options['vxKeyIncrement'];
+        }
     }
     else if (code == 'right' || code == 39 || code == 68) {
         // Right arrow or "d"
-	vz -= options['vzKeyIncrement'];
+        if($('#walkingSpeed').val() != null) {
+            vz -= $('#walkingSpeed').val();
+        } else {
+            vz -= options['vzKeyIncrement'];
+        }
     }
     else if (code == 'backward' || code == 40 || code == 88) {
         // Down arrow or "x"
-	vx -= options['vxKeyIncrement'];
+        if($('#walkingSpeed').val() != null) {
+            vx -= $('#walkingSpeed').val();
+        } else {
+            vx -= options['vxKeyIncrement'];
+        }
     }
 }
 

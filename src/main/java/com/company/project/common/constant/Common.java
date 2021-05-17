@@ -287,9 +287,11 @@ public interface Common {
         //践踏草坪
         String WALKONGRASS = "OnGrass";
         //异物
-        String FOREIGNMATTER = "Object";
-
-
+        String FOREIGNMATTER = "EPD";
+        //温湿度
+        String TEMPHUM = "TmpHum";
+        //目标物体检测
+        String OBJECT_DETECTION = "Object";
 
     }
 

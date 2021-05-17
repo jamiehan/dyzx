@@ -94,12 +94,14 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/onekeyalarm", "anon");
         filterChainDefinitionMap.put("/robot/cameractrl","anon");
         filterChainDefinitionMap.put("/rtsp/receive","anon");
-        filterChainDefinitionMap.put("/videostream", "anon");
+        filterChainDefinitionMap.put("/video", "anon");
         filterChainDefinitionMap.put("/index/sysGenerator", "anon");
         filterChainDefinitionMap.put("/facealarm", "anon");
         filterChainDefinitionMap.put("/receivealarm", "anon");
         filterChainDefinitionMap.put("/gatheringalarm", "anon");
         filterChainDefinitionMap.put("/walkongrassalarm", "anon");
+        filterChainDefinitionMap.put("/temphum", "anon");
+        filterChainDefinitionMap.put("/foreignmatteralarm", "anon");
         //文件上传可直接访问
         filterChainDefinitionMap.put(fileUploadProperties.getAccessUrl(), "anon");
         filterChainDefinitionMap.put("/images/**", "anon");

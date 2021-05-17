@@ -192,7 +192,7 @@ public class RobotController {
             String command = ffmpegPath; // ffmpeg位置
             command += "ffmpeg "; // ffmpeg开头，-re代表按照帧率发送，在推流时必须有
             command += " -i \"" + videoSrc + "\""; // 指定要推送的视频
-            command += " -q 0 -f mpegts -codec:v mpeg1video -s 400x300 " + videoDest; // 指定推送服务器，-f：指定格式
+            command += " -q 0 -f mpegts -codec:v mpeg1video -s 480x360 " + videoDest; // 指定推送服务器，-f：指定格式
 
 //            command = ffmpegPath + "ffmpeg -i " + videoSrc + " -vcodec copy -acodec copy -f flv " + videoDest;
 //            System.out.println("ffmpeg推流命令：" + command);

@@ -112,7 +112,8 @@
     .robot-ctrl-center {text-align: center;}
     .robot-ctrl-right {text-align: center}
     .robot-ctrl-down {text-align: center}
-    .robot-ctrl-btn {margin-left:5px; margin-top:2px; text-align: right}
+    .rotot-ctrl-walking-speed {text-align: center}
+    .robot-ctrl-btn {margin-left:5px; margin-top:2px; text-align: center}
     .cruise-control-area {height:120px;}
     .cruise-ctrl-up {margin-top:10px;text-align: left}
     .cruise-ctrl-up > select {width: 120px}
@@ -202,14 +203,14 @@
 
                                 </div>
                                 <div class="layui-row camera-ctrl-center">
-                                    <div class="layui-col-md3 camera-ctrl-left"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,2)" onmouseup="cameraCtrl(1,2)">左</button></div>
+                                    <div class="layui-col-md3 camera-ctrl-left"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,3)" onmouseup="cameraCtrl(1,3)">左</button></div>
                                     <div class="layui-col-md6 camera-ctrl-zoomin">
                                         <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,4)" onmouseup="cameraCtrl(1,4)">+</button><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,5)" onmouseup="cameraCtrl(1,5)">-</button>
                                         <!--                                        </div>-->
                                         <!--                                        <div class="layui-col-md3 camera-ctrl-zoomout">-->
                                         <!--                                            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,5)" onmouseup="cameraCtrl(1,5)">-</button>-->
                                     </div>
-                                    <div class="layui-col-md3 camera-ctrl-right"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,3)" onmouseup="cameraCtrl(1,3)">右</button></div>
+                                    <div class="layui-col-md3 camera-ctrl-right"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,2)" onmouseup="cameraCtrl(1,2)">右</button></div>
                                 </div>
                                 <div class="layui-row camera-ctrl-down">
                                     <!--                                        <div class="layui-col-md4 camera-ctrl-left-down"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,12)" onmouseup="cameraCtrl(1,12)">左下</button></div>-->
@@ -234,10 +235,10 @@
                                 </div>
                             </div>
                             <div class="layui-col-md4 camera-control-area-right">
-                                <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,12)" onmouseup="cameraCtrl(1,12)">&nbsp;左&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上&nbsp;</button></div>
-                                <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,11)" onmouseup="cameraCtrl(1,11)">&nbsp;左&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下&nbsp;</button></div>
-                                <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,10)" onmouseup="cameraCtrl(1,10)">&nbsp;右&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上&nbsp;</button></div>
-                                <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,13)" onmouseup="cameraCtrl(1,13)">&nbsp;右&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下&nbsp;</button></div>
+                                <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,10)" onmouseup="cameraCtrl(1,10)">&nbsp;左&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上&nbsp;</button></div>
+                                <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,13)" onmouseup="cameraCtrl(1,13)">&nbsp;左&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下&nbsp;</button></div>
+                                <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,12)" onmouseup="cameraCtrl(1,12)">&nbsp;右&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上&nbsp;</button></div>
+                                <div class="layui-rows camera-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onmousedown="cameraCtrl(0,11)" onmouseup="cameraCtrl(1,11)">&nbsp;右&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下&nbsp;</button></div>
                             </div>
                         </div>
                     </fieldset>
@@ -266,9 +267,29 @@
                                 </div>
                             </div>
                             <div class="layui-col-md5 robot-control-area-right">
-                                <div class="layui-rows robot-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="chargingPoint()">&nbsp;充&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电&nbsp;</button></div>
+                                <div class="layui-row robot-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="chargingPoint()">&nbsp;充&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电&nbsp;</button></div>
                                 <!--                                    <div class="layui-rows robot-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">&nbsp;抓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;拍&nbsp;</button></div>-->
                                 <!--                                    <div class="layui-rows robot-ctrl-btn"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal">查看历史抓拍</button></div>-->
+                                <div class="layui-row rotot-ctrl-walking-speed">行走速度：</div>
+                                <div class="layui-row rotot-ctrl-walking-speed">
+                                    <select name="walking-speed" id="walkingSpeed">
+                                        <option value="0.05" selected="">0.05</option>
+                                        <option value="0.1">0.1</option>
+                                        <option value="0.15">0.15</option>
+                                        <option value="0.2">0.2</option>
+                                        <option value="0.25">0.25</option>
+                                        <option value="0.3">0.3</option>
+                                        <option value="0.4">0.4</option>
+                                        <option value="0.5">0.5</option>
+                                        <option value="0.6">0.6</option>
+                                        <option value="0.7">0.7</option>
+                                        <option value="0.8">0.8</option>
+                                        <option value="0.9">0.9</option>
+                                        <option value="1.0">1.0</option>
+                                        <option value="1.1">1.1</option>
+                                        <option value="1.2">1.2</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </fieldset>
@@ -312,7 +333,11 @@
                         <div class="layui-col-md1">在线状态：</div>
                         <div class="layui-col-md1"><span id="state"></span></div>
                         <div class="layui-col-md1">电池电量：</div>
-                        <div class="layui-col-md5"><span id="batteryValue"></span></div>
+                        <div class="layui-col-md1"><span id="batteryValue"></span></div>
+                        <div class="layui-col-md1">温度：</div>
+                        <div class="layui-col-md1"><span id="temperature"></span></div>
+                        <div class="layui-col-md1">湿度：</div>
+                        <div class="layui-col-md1"><span id="humidity"></span></div>
                         <!--<div class="layui-col-md1 display:none"><span id="ipaddress"></span></div>-->
                     </div>
                     <div class="layui-row">
@@ -533,7 +558,7 @@
 
     var canvas = document.getElementById('video');
     // var url = 'ws://101.200.59.132:8080/videostream';
-    var url = 'ws://'+ VIDEO_SERVER_IP + ':' + SERVER_PORT + '/videostream';
+    var url = 'ws://'+ VIDEO_SERVER_IP + ':' + VIDEO_SERVER_PORT + '/video';
     // var url = 'rtmp://127.0.0.1:1935/live/test';
     var player = new JSMpeg.Player(url, {canvas: canvas});
 
@@ -654,8 +679,10 @@
         var selectArr = locationList.getValue("value");
         if(selectArr.length < 1) {
             layer.alert("请选择要巡航的目的地位置");
+            return;
         } else if (selectArr.length > 1) {
             layer.alert("单点巡航只能选择一个目的地位置");
+            return;
         }
         // alert(selectArr.length);
         //alert(JSON.stringify(selectArr, null, 2));
@@ -721,7 +748,49 @@
         var selectArr = locationList.getValue();
         document.getElementById('locationList-value').innerHTML = JSON.stringify(selectArr, null, 2);
     }*/
-    
+    var socketurl = "ws://" + SERVER_IP + ":" + SERVER_PORT + "/temphum";
+    var ws = null;
+    createWebSocket();
+    function createWebSocket(){
+        try {
+            ws = new WebSocket(socketurl);
+            initEventHandle();
+        } catch (e) {
+            reconnect();
+        }
+    }
+
+    function reconnect() {
+        //没连接上会一直重连，设置延迟避免请求过多
+        createWebSocket();
+
+    }
+
+    //初始化信息
+    function initEventHandle() {
+        ws.onopen = function (event) {
+            // alert("打开链接...");
+            //var txt = {'code':1001};
+            // ws.send(JSON.stringify(txt));//获取我的socketid
+        }
+        ws.onclose = function (event) {
+            // alert("关闭链接...");
+            //关闭的时候会调用这里
+            ws = new WebSocket(socketurl);
+        }
+
+        ws.onmessage = function (evt) {
+            //alert("收到消息...");
+            // alert(evt.data);
+            console.log("evt.data = " + evt.data);
+            var retData = JSON.parse(evt.data);
+            //alert("retData.temperature=" + retData.tempHumResultVO.temperature);
+            //alert("retData.humidity=" + retData.tempHumResultVO.temperature);
+            $("#temperature").html(Number(retData.tempHumResultVO.temperature).toFixed(2) + " ℃");
+            $("#humidity").html(Number(retData.tempHumResultVO.humidity).toFixed(2) + " %RH");
+
+        }
+    }
 </script>
 <!--<script>
              var options = {
@@ -794,5 +863,7 @@
                     document.getElementsByClassName('videoTips')[0].innerHTML+=str+"<br/>";
                 }
      </script>-->
+
+
 </body>
 </html>

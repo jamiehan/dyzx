@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+</head>
+<script src="/js/jquery.js"></script>
+<script src="/js/date.format.js"></script>
+<script src="/js/common.js"></script>
+<style>
+    .walkongrass-image-area {
+        height:300px;
+        width: 550px;
+        display: table;
+    }
+    .scene-image {
+        height:300px;
+        width: 550px;
+        background-color: #000000;
+        text-align: center;
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .info-show {
+        width: 550px;
+    }
+</style>
+<body>
+<div class="layui-container">
+    <div class="layui-row walkongrass-image-area">
+        <div class="layui-col-md12">
+            <fieldset>
+                <legend>现场照片</legend>
+                <div class="layui-row scene-image">
+                    <img id="sceneImg">
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div class="layui-row info-show">
+        <fieldset>
+            <legend>信息提示</legend>
+            <div class="layui-row">
+                <div class="layui-col-md2">机器人编号:</div>
+                <div class="layui-col-md3"><span id="robotCode"></span></div>
+<!--                <div class="layui-col-md2">聚集人数:</div>
+                <div class="layui-col-md3"><span id="peopleNum"></span></div>-->
+            </div>
+            <!--<div class="layui-row">
+                <div class="layui-col-md2">交控单位:</div>
+                <div class="layui-col-md4"><span id="recCompany"></span></div>
+                <div class="layui-col-md2">交控日期:</div>
+                <div class="layui-col-md4"><span id="recDate"></span></div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2">单位电话:</div>
+                <div class="layui-col-md4"><span id="telephone"></span></div>
+                <div class="layui-col-md2">查控类型:</div>
+                <div class="layui-col-md4"><span id="checkType"></span></div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2">处置类型:</div>
+                <div class="layui-col-md4"><span id="dealType"></span></div>
+                <div class="layui-col-md2">备注:</div>
+                <div class="layui-col-md4"><span id="note"></span></div>
+            </div>-->
+
+        </fieldset>
+    </div>
+</div>
+<script>
+
+    Date.prototype.format = function(format) {
+        var o = {
+            "M+": this.getMonth() + 1,
+            "d+": this.getDate(),
+            "h+": this.getHours(),
+            "m+": this.getMinutes(),
+            "s+": this.getSeconds(),
+            "q+": Math.floor((this.getMonth() + 3) / 3),
+            "S": this.getMilliseconds()
+        }
+        if (/(y+)/.test(format)) {
+            format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+        for (var k in o) {
+            if (new RegExp("(" + k + ")").test(format)) {
+                format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+            }
+        }
+        return format;
+    }
+
+    //var socketurl = "ws://192.168.1.58:8080/facealarm";
+    var socketurl = "ws://" + SERVER_IP + ":" + SERVER_PORT + "/foreignmatteralarm";
+    var ws = null;
+    var xt = 0;
+    createWebSocket();
+    function createWebSocket(){
+        try {
+            ws = new WebSocket(socketurl);
+            initEventHandle();
+        } catch (e) {
+            reconnect();
+        }
+    }
+
+    function reconnect() {
+        //没连接上会一直重连，设置延迟避免请求过多
+        createWebSocket();
+
+    }
+    //初始化信息
+    function initEventHandle() {
+        ws.onopen = function(event){
+            // alert("打开链接...");
+            //var txt = {'code':1001};
+            // ws.send(JSON.stringify(txt));//获取我的socketid
+        }
+        ws.onclose = function (event) {
+            // alert("关闭链接...");
+            //关闭的时候会调用这里
+            ws = new WebSocket(socketurl);
+        }
+
+        ws.onmessage = function(evt){
+            console.log(evt.data);
+
+            let recData = JSON.parse(evt.data);
+            $("#sceneImg").attr("src","data:image/jpeg;base64," + recData.foreignMatterResultVO.image);
+            $("#robotCode").html(recData.foreignMatterResultVO.robot_ID);
+            $("#sceneImg").css("width","500px");
+            $("#sceneImg").css("height","300px");
+
+
+        }
+    }
+
+
+</script>
+</body>
+</html>

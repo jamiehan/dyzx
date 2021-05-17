@@ -45,7 +45,7 @@ public class RobotOperationController {
 
         // 根据机器人IP地址，给摄像头控制的对应指令
         Channel channel = NettyTcpServer.deviceChannelMap.get(currentRobot.getPcIp());
-
+        //Channel channel = NettyTcpServer.deviceChannelMap.get("192.168.1.32");
         PTZControllerVO ptzControllerVO = new PTZControllerVO();
         ptzControllerVO.setAction(vo.getAction());
         ptzControllerVO.setPtzControlType(vo.getPtzControlType());

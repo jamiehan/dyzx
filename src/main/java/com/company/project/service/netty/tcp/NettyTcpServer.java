@@ -26,10 +26,14 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -46,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class NettyTcpServer {
 
-
+    private static final Logger logger = LoggerFactory.getLogger(NettyTcpServer.class);
     /**
      * DeviceId:Channel
      * 用于存放设备的 Netty Context Channel
@@ -79,7 +83,6 @@ public class NettyTcpServer {
     private NettyTcpServerHandler nettyTcpServerHandler;
 
 
-    @SneakyThrows
     public void start() {
         //NioEventLoopGroup是用来处理IO操作的多线程事件循环器
         EventLoopGroup bossGroup  = new NioEventLoopGroup();  // 用来接收进来的连接
@@ -95,16 +98,19 @@ public class NettyTcpServer {
                     .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(10240))
 //                    .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(DEFAULT_MAXIMUM))
 //                    .option(ChannelOption.RCVBUF_ALLOCATOR, new AdaptiveRecvByteBufAllocator(DEFAULT_MINIMUM, DEFAULT_INITIAL, DEFAULT_MAXIMUM))
-                    .option(ChannelOption.SO_RCVBUF,1024*10)
+                    .option(ChannelOption.SO_RCVBUF, 1024 * 10)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel channel) {
-                            channel.pipeline().addLast(new CommonDecoder(Integer.parseInt(portArray[0]),Integer.parseInt(portArray[1])));
+                            channel.pipeline().addLast(new CommonDecoder(Integer.parseInt(portArray[0]), Integer.parseInt(portArray[1])));
                             channel.pipeline().addLast("ping",new IdleStateHandler(1,1,1*1, TimeUnit.SECONDS));
 //                            channel.pipeline().addLast(" framer",new DelimiterBasedFrameDecoder(Integer.MAX_VALUE,Unpooled.wrappedBuffer(new byte [] {'E','O','F','\n'})));
 ////                            channel.pipeline().addLast(new DelimiterBasedFrameDecoder(65535, Unpooled.copiedBuffer(header)));
 //                            channel.pipeline().addLast(new StringDecoder());
+                            channel.pipeline().addLast(new ReadTimeoutHandler(30), nettyTcpServerHandler);
                             channel.pipeline().addLast(new WriteTimeoutHandler(30), nettyTcpServerHandler);
+                            //channel.pipeline().addLast(new WebSocketServerProtocolHandler("/video"));
+                            channel.pipeline().addLast(nettyTcpServerHandler);
                         }
                     });
                  /*   .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -119,31 +125,35 @@ public class NettyTcpServer {
 //            future.channel().closeFuture().sync();
 //            bootstrap.option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(65535));
             // 绑定端口，开始接收进来的连接
-            ChannelFuture future1 = bootstrap.bind(Integer.parseInt(portArray[0])).sync();
-            ChannelFuture future2 = bootstrap.bind(Integer.parseInt(portArray[1])).sync();
-            ChannelFuture future3 = bootstrap.bind(Integer.parseInt(portArray[2])).sync();
+            ChannelFuture future1 = bootstrap.bind(new InetSocketAddress(Integer.parseInt(portArray[0]))).sync();
+            ChannelFuture future2 = bootstrap.bind(new InetSocketAddress(Integer.parseInt(portArray[1]))).sync();
+            ChannelFuture future3 = bootstrap.bind(new InetSocketAddress(Integer.parseInt(portArray[2]))).sync();
 
-            future1.channel().closeFuture().addListener(new ChannelFutureListener()
-            {
-                @Override public void operationComplete(ChannelFuture future) throws Exception
-                {       //通过回调只关闭自己监听的channel
+            future1.channel().closeFuture().addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture future) throws Exception {       //通过回调只关闭自己监听的channel
+                    //future.channel().pipeline().remove(NettyTcpServerHandler.class.getSimpleName());
+                    //future.channel().pipeline().remove(WebSocketServerProtocolHandler.class.getSimpleName());
                     future.channel().close();
                 }
             });
-            future2.channel().closeFuture().addListener(new ChannelFutureListener()
-            {
-                @Override public void operationComplete(ChannelFuture future) throws Exception
-                {
+            future2.channel().closeFuture().addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture future) throws Exception {
                     future.channel().close();
                 }
             });
-            future3.channel().closeFuture().addListener(new ChannelFutureListener()
-            {
-                @Override public void operationComplete(ChannelFuture future) throws Exception
-                {
+            future3.channel().closeFuture().addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture future) throws Exception {
+                    future.channel().pipeline().remove(NettyTcpServerHandler.class.getSimpleName());
+                    future.channel().pipeline().remove(WebSocketServerProtocolHandler.class.getSimpleName());
                     future.channel().close();
                 }
             });
+        }catch(Exception e) {
+            logger.info("NettyTcpServer 启动时发生异常。");
+            logger.info(e.getMessage());
         } finally {
 //            group.shutdownGracefully().sync();
 //            bossGroup.shutdownGracefully().sync();

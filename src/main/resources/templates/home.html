@@ -166,14 +166,14 @@
             <li class="layui-nav-item face-alarm"><button data-method="setFaceAlarmTop" class="layui-btn">人脸报警</button></li>
             <li class="layui-nav-item gathering-alarm"><button data-method="setGatheringAlarmTop" class="layui-btn">人员聚集报警</button></li>
             <li class="layui-nav-item walk-on-grass-alarm"><button data-method="setWalkOnGrassAlarmTop" class="layui-btn">践踏草坪报警</button></li>
-            <li class="layui-nav-item"><a href="">温湿度报警</a></li>
+            <!--<li class="layui-nav-item"><a href="">温湿度报警</a></li>-->
             <!--<li class="layui-nav-item"><a href="">噪声报警</a></li>-->
-            <li class="layui-nav-item"><a href="">安全帽报警</a></li>
-            <li class="layui-nav-item"><a href="">异物报警</a></li>
-            <li class="layui-nav-item"><a href="">火源报警</a></li>
-            <li class="layui-nav-item"><a href="">指示灯报警</a></li>
-            <li class="layui-nav-item"><a href="">热成像报警</a></li>
-            <li class="layui-nav-item"><a href="">RFID报警</a></li>
+            <!--<li class="layui-nav-item"><a href="">安全帽报警</a></li>-->
+            <li class="layui-nav-item foreign-matter-alarm"><button data-method="setForeignMatterAlarmTop" class="layui-btn">异物报警</button></li>
+            <!--<li class="layui-nav-item"><a href="">火源报警</a></li>-->
+            <!--<li class="layui-nav-item"><a href="">指示灯报警</a></li>-->
+            <!--<li class="layui-nav-item"><a href="">热成像报警</a></li>-->
+            <!--<li class="layui-nav-item"><a href="">RFID报警</a></li>-->
 
         </ul>
     </div>
@@ -525,10 +525,12 @@
     let faceAlarmInterval;
     let gatheringAlarmInterval;
     let walkOnGrassAlarmInterval;
+    let foreignMatterAlarmInterval;
     let isNeedOnekeyAlarm = true;
     let isNeedFaceAlarm = true;
     let isNeedGatheringAlarm = true;
     let isNeedWalkOnGrassAlarm = true;
+    let isNeedForeignMatterAlarm = true;
 
     $(function () {
 
@@ -596,7 +598,7 @@
                                     ulHtml += '<dd><a>' + child.title + '</a>';
                                     ulHtml += getChild(child.children, "");
                                 } else if (child.children != null && child.children.length > 0 && child.type != 1) {
-                                    ulHtml += '<a>' + child.tit武le + '</a>';
+                                    ulHtml += '<a>' + child.title + '</a>';
                                     ulHtml += getChild(child.children, "");
                                 } else {
                                     if (child.target == "_blank") {
@@ -864,6 +866,36 @@
                     }
                 });
             }
+            ,setForeignMatterAlarmTop: function(){
+                $(".foreign-matter-alarm > button").css("color","#FFFFFF");
+                clearInterval(foreignMatterAlarmInterval);
+                let auto = $("#auto");
+                auto.attr("src","");
+                var that = this;
+                //多窗口模式，层叠置顶
+                layer.open({
+                    type: 2 //此处以iframe举例
+                    ,title: '异物报警'
+                    ,offset: 'auto'
+                    ,area: ['600px', '500px']
+                    ,shade: 0
+                    ,maxmin: true
+                    ,content: '/index/foreignmatteralarm'
+                    ,btn:['关闭窗口']
+                    ,yes: function(){
+                        // 接警完关闭后，把接下一次警开关打开
+                        isNeedForeignMatterAlarm = true;
+                        layer.closeAll();
+                    }
+                    ,cancel: function(){
+                        isNeedForeignMatterAlarm = true;
+                    }
+                    ,zIndex: layer.zIndex //重点1
+                    ,success: function(layero){
+                        layer.setTop(layero); //重点2
+                    }
+                });
+            }
             ,confirmTrans: function(){
                 //配置一个透明的询问框
                 layer.msg('大部分参数都是可以公用的<br>合理搭配，展示不一样的风格', {
@@ -971,8 +1003,19 @@
         }
     }
 
+    function changeForeignMatterAlarmFontColor() {
+
+        if (flag) {
+            flag = false;
+            $(".foreign-matter-alarm > button").css("color","#FFFFFF");
+        } else {
+            flag = true;
+            $(".foreign-matter-alarm > button").css("color","#FF0000");
+        }
+    }
+
     //var socketurl = "ws://192.168.1.58:8080/receivealarm";
-    var socketurl = "ws://" + SERVER_IP + ":" + SERVER_PORT + "/receivealarm";
+        var socketurl = "ws://" + SERVER_IP + ":" + SERVER_PORT + "/receivealarm";
     var ws = null;
     var xt = 0;
     createWebSocket();
@@ -1040,6 +1083,48 @@
                 faceAlarmInterval = setInterval(changeFaceAlarmFontColor,100);
                 playSound("/js/alarm.wav");
                 isNeedFaceAlarm = false;
+                //layui.layer.setFaceAlarmTop();
+                // active["setFaceAlarmTop"].call(this, $(this));
+                // layui.layer.active("setFaceAlarmTop").call(this,$this);
+               /*
+                //页面层
+                layer.open({
+                    type: 2 //此处以iframe举例
+                    ,title: '人脸报警'
+                    ,offset: 'auto'
+                    ,area: ['1200px', '600px']
+                    ,shade: 0
+                    ,maxmin: true
+                    // ,offset: [ //为了演示，随机坐标
+                    //     Math.random()*($(window).height()-300)
+                    //     ,Math.random()*($(window).width()-390)
+                    // ]
+                    // ,content: '//layer.layui.com/test/settop.html'
+                    ,content: '/index/facealarm'
+                    // ,btn: ['继续弹出', '全部关闭'] //只是为了演示
+                    ,btn:['关闭窗口']
+                    ,yes: function(){
+                        //     $(that).click();
+                        //     // 接警完关闭后，把接下一次警开关打开
+                        isNeedFaceAlarm = true;
+                        layer.closeAll();
+                    }
+                    // ,btn2: function(){
+                    //     // layer.closeAll();
+                    //     layer.close();
+                    //     // 接警完关闭后，把接下一次警开关打开
+                    //     isNeedFaceAlarm = true;
+                    // }
+                    ,cancel: function(){
+                        isNeedFaceAlarm = true;
+                    }
+                    ,zIndex: layer.zIndex //重点1
+                    ,success: function(layero){
+                        layer.setTop(layero); //重点2
+                    }
+                });
+                */
+
             } else if ("gatheringAlarm" == retData.alarmType && isNeedGatheringAlarm) {
                 // $(".face-alarm > button").css("color","#FF0000");
                 gatheringAlarmInterval = setInterval(changeGatheringAlarmFontColor,100);
@@ -1050,6 +1135,11 @@
                 walkOnGrassAlarmInterval = setInterval(changeWalkOnGrassAlarmFontColor,100);
                 playSound("/js/alarm.wav");
                 isNeedWalkOnGrassAlarm = false;
+            } else if ("foreignMatterAlarm" == retData.alarmType && isNeedForeignMatterAlarm) {
+                // $(".face-alarm > button").css("color","#FF0000");
+                foreignMatterAlarmInterval = setInterval(changeForeignMatterAlarmFontColor,100);
+                playSound("/js/alarm.wav");
+                isNeedForeignMatterAlarm = false;
             }
 
             // var player = $("#alarmSoundPlayer")[0];
